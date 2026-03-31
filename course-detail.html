@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0284C7"/>
+  <title>Course Detail — Physics with Vikas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { sora:["Sora","sans-serif"], dm:["DM Sans","sans-serif"] },
+        colors: { primary:"#0284C7", dark:"#0F172A", card:"#1E293B" }
+      }}
+    }
+  </script>
+  <style>
+    body { font-family:"DM Sans",sans-serif; background:#0F172A; color:#fff; }
+    .card-glass { background:rgba(30,41,59,0.8); border:1px solid rgba(148,163,184,0.1); }
+    .check-item::before { content:"✓"; color:#22C55E; margin-right:8px; font-weight:600; }
+  </style>
+</head>
+<body class="min-h-screen pb-32">
+
+<div class="max-w-md mx-auto w-full">
+
+  <!-- Hero Banner -->
+  <div id="heroSection" class="relative h-56 flex items-end p-5 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-sky-900 to-blue-950 flex items-center justify-center">
+      <span class="text-9xl opacity-20" id="heroEmoji">⚡</span>
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+
+    <!-- Back -->
+    <a href="course.html" class="absolute top-5 left-5 w-9 h-9 rounded-xl bg-black/40 backdrop-blur flex items-center justify-center">
+      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </a>
+
+    <div class="relative z-10">
+      <span class="bg-sky-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold" id="levelBadge">Class 11</span>
+      <h1 class="font-sora font-bold text-2xl text-white mt-2 leading-tight" id="courseTitle">Course Title</h1>
+    </div>
+  </div>
+
+  <div class="px-5 pt-5">
+    <!-- Stats Row -->
+    <div class="card-glass rounded-2xl p-4 flex justify-around mb-5">
+      <div class="text-center">
+        <p class="font-sora font-bold text-sky-400 text-xl" id="statLectures">—</p>
+        <p class="text-slate-500 text-xs mt-0.5">Lectures</p>
+      </div>
+      <div class="w-px bg-slate-700"></div>
+      <div class="text-center">
+        <p class="font-sora font-bold text-sky-400 text-xl" id="statChapters">—</p>
+        <p class="text-slate-500 text-xs mt-0.5">Chapters</p>
+      </div>
+      <div class="w-px bg-slate-700"></div>
+      <div class="text-center">
+        <p class="font-sora font-bold text-sky-400 text-xl" id="statDuration">—</p>
+        <p class="text-slate-500 text-xs mt-0.5">Hours</p>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-5">
+      <h2 class="font-sora font-semibold text-white text-lg mb-2">About this course</h2>
+      <p class="text-slate-400 text-sm leading-relaxed" id="courseDesc">—</p>
+    </div>
+
+    <!-- What You'll Get -->
+    <div class="mb-5">
+      <h2 class="font-sora font-semibold text-white text-lg mb-3">What's included</h2>
+      <div class="space-y-2" id="highlights">
+        <!-- Populated -->
+      </div>
+    </div>
+
+    <!-- Topics -->
+    <div class="mb-5">
+      <h2 class="font-sora font-semibold text-white text-lg mb-3">Topics covered</h2>
+      <div class="flex flex-wrap gap-2" id="tags">
+        <!-- Populated -->
+      </div>
+    </div>
+
+    <!-- Instructor Card -->
+    <div class="card-glass rounded-2xl p-4 flex gap-4 items-center mb-5">
+      <div class="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center text-2xl flex-shrink-0">👨‍🏫</div>
+      <div>
+        <p class="font-sora font-bold text-white">Vikas Sir</p>
+        <p class="text-slate-400 text-sm mt-0.5">Physics Educator · 7+ Years Experience</p>
+        <p class="text-slate-500 text-xs mt-1">IIT-JEE & Board specialist</p>
+      </div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="mb-5">
+      <h2 class="font-sora font-semibold text-white text-lg mb-3">Student Reviews</h2>
+      <div class="space-y-3">
+        <div class="card-glass rounded-xl p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-sky-500/30 flex items-center justify-center text-sm font-bold text-sky-400">A</div>
+            <div>
+              <p class="text-white text-sm font-medium">Arjun M.</p>
+              <p class="text-amber-400 text-xs">★★★★★</p>
+            </div>
+          </div>
+          <p class="text-slate-400 text-sm">"Vikas Sir explains concepts so clearly. Newton's Laws finally made sense after watching his lectures!"</p>
+        </div>
+        <div class="card-glass rounded-xl p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-emerald-500/30 flex items-center justify-center text-sm font-bold text-emerald-400">P</div>
+            <div>
+              <p class="text-white text-sm font-medium">Priya K.</p>
+              <p class="text-amber-400 text-xs">★★★★★</p>
+            </div>
+          </div>
+          <p class="text-slate-400 text-sm">"The DPPs are excellent for JEE practice. Scored 85 in my boards after this course!"</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Sticky Bottom CTA -->
+<div class="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-5 py-4 z-50 max-w-md mx-auto">
+  <div class="flex items-center justify-between mb-3">
+    <div>
+      <span class="text-sky-400 font-sora font-bold text-2xl" id="stickyPrice">₹2,499</span>
+      <span class="text-slate-500 text-sm line-through ml-2" id="stickyOriginal">₹4,999</span>
+    </div>
+    <span class="text-emerald-400 text-sm font-semibold">50% OFF 🎉</span>
+  </div>
+  <a id="enrollBtn" href="buy.html" class="w-full bg-sky-500 hover:bg-sky-400 text-white font-sora font-bold py-4 rounded-2xl text-center text-base block transition shadow-lg shadow-sky-500/30">
+    Enroll Now →
+  </a>
+</div>
+
+<script src="script.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const courseId = params.get("id") || "c1";
+  const course = COURSES.find(c => c.id === courseId) || COURSES[0];
+
+  // Fill in details
+  document.getElementById("courseTitle").textContent = course.title;
+  document.getElementById("levelBadge").textContent = course.level;
+  document.getElementById("courseDesc").textContent = course.description;
+  document.getElementById("statLectures").textContent = course.lectures;
+  document.getElementById("statChapters").textContent = course.chapters;
+  document.getElementById("statDuration").textContent = course.duration;
+  document.getElementById("stickyPrice").textContent = `₹${course.price.toLocaleString()}`;
+  document.getElementById("stickyOriginal").textContent = `₹${course.originalPrice.toLocaleString()}`;
+  document.getElementById("enrollBtn").href = `buy.html?id=${course.id}`;
+
+  const emojis = { c1:"⚡", c2:"🔋" };
+  const gradients = { c1:"from-sky-900 to-blue-950", c2:"from-purple-900 to-indigo-950" };
+  document.getElementById("heroEmoji").textContent = emojis[courseId] || "⚡";
+  document.getElementById("heroSection").querySelector(".absolute").className = `absolute inset-0 bg-gradient-to-br ${gradients[courseId]||'from-sky-900 to-blue-950'} flex items-center justify-center`;
+
+  document.getElementById("highlights").innerHTML = course.highlights.map(h =>
+    `<div class="flex items-start text-sm text-slate-300 check-item">${h}</div>`
+  ).join("");
+
+  document.getElementById("tags").innerHTML = course.tags.map(t =>
+    `<span class="text-sm bg-sky-500/10 text-sky-400 border border-sky-500/20 px-3 py-1 rounded-full">${t}</span>`
+  ).join("");
+
+  // Check if already purchased
+  if (Auth.hasPurchased(courseId)) {
+    const btn = document.getElementById("enrollBtn");
+    btn.textContent = "Access Course →";
+    btn.href = `access.html?id=${courseId}`;
+    btn.className = "w-full bg-emerald-500 hover:bg-emerald-400 text-white font-sora font-bold py-4 rounded-2xl text-center text-base block transition";
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0F172A"/>
+  <title>Admin Panel — Physics with Vikas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sora:["Sora","sans-serif"], dm:["DM Sans","sans-serif"] } } }
+    }
+  </script>
+  <style>
+    body { font-family:"DM Sans",sans-serif; background:#0F172A; color:#fff; }
+    .card-glass { background:rgba(30,41,59,0.8); border:1px solid rgba(148,163,184,0.1); }
+    .input-field { background:#1E293B; border:1px solid #334155; color:#fff; }
+    .input-field:focus { outline:none; border-color:#0284C7; }
+    .step-box { background:#1E293B; border-left:3px solid #0284C7; }
+  </style>
+</head>
+<body class="min-h-screen pb-10">
+
+<!-- Login Gate -->
+<div id="adminLogin" class="min-h-screen flex items-center justify-center px-5">
+  <div class="w-full max-w-sm">
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 rounded-2xl bg-red-500 mx-auto flex items-center justify-center text-3xl mb-3">🔐</div>
+      <h1 class="font-sora font-bold text-xl text-white">Admin Access</h1>
+      <p class="text-slate-400 text-sm mt-1">Physics with Vikas — Admin Panel</p>
+    </div>
+    <input id="adminPassInput" type="password" placeholder="Admin password"
+      class="input-field w-full px-4 py-3 rounded-xl text-sm mb-3"/>
+    <button onclick="checkAdminPass()" class="w-full bg-sky-500 text-white font-bold py-3 rounded-xl">Enter</button>
+    <p class="text-red-400 text-xs text-center mt-2 hidden" id="adminErr">Wrong password</p>
+  </div>
+</div>
+
+<!-- Admin Dashboard -->
+<div id="adminDash" class="hidden max-w-md mx-auto w-full px-5 pt-6">
+
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="font-sora font-bold text-2xl text-white">Admin Panel</h1>
+      <p class="text-slate-400 text-sm">Physics with Vikas</p>
+    </div>
+    <button onclick="adminLogout()" class="text-xs bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-1.5 rounded-lg">Logout</button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-2 gap-3 mb-6" id="statsGrid">
+    <div class="card-glass rounded-2xl p-4">
+      <p class="text-slate-400 text-xs mb-1">Total Submissions</p>
+      <p class="font-sora font-bold text-sky-400 text-2xl" id="totalSubmissions">—</p>
+    </div>
+    <div class="card-glass rounded-2xl p-4">
+      <p class="text-slate-400 text-xs mb-1">Pending Review</p>
+      <p class="font-sora font-bold text-amber-400 text-2xl" id="pendingCount">—</p>
+    </div>
+  </div>
+
+  <!-- Google Sheets Instructions -->
+  <div class="mb-6">
+    <h2 class="font-sora font-semibold text-white text-lg mb-3">📊 Google Sheets Workflow</h2>
+
+    <div class="space-y-3">
+      <div class="step-box rounded-r-xl p-4">
+        <p class="font-semibold text-white text-sm mb-1">Step 1 — Open Payments Sheet</p>
+        <p class="text-slate-400 text-xs">Go to your Google Sheet → Payments tab. New submissions appear here automatically.</p>
+        <a href="YOUR_GOOGLE_SHEET_URL_HERE" target="_blank" class="mt-2 inline-block text-sky-400 text-xs border border-sky-500/30 px-3 py-1 rounded-lg">Open Google Sheet →</a>
+      </div>
+
+      <div class="step-box rounded-r-xl p-4">
+        <p class="font-semibold text-white text-sm mb-1">Step 2 — Verify Payment</p>
+        <p class="text-slate-400 text-xs">Check UPI remark in your PhonePe/GPay transaction history. Match with student's submitted remark.</p>
+        <div class="mt-2 bg-slate-800 rounded-lg p-2 text-xs font-mono text-slate-300">
+          Format: PhysicsCourse_[StudentName]
+        </div>
+      </div>
+
+      <div class="step-box rounded-r-xl p-4">
+        <p class="font-semibold text-white text-sm mb-1">Step 3 — Update Sheet</p>
+        <p class="text-slate-400 text-xs">In Payments sheet, change the <code class="text-sky-400">Verified</code> column to <code class="text-emerald-400">YES</code> for verified payments.</p>
+      </div>
+
+      <div class="step-box rounded-r-xl p-4">
+        <p class="font-semibold text-white text-sm mb-1">Step 4 — Grant Drive Access</p>
+        <p class="text-slate-400 text-xs">Open Google Drive folder → Right-click → Share → Add the student's Gmail address with Viewer access.</p>
+        <a href="YOUR_GOOGLE_DRIVE_FOLDER_URL" target="_blank" class="mt-2 inline-block text-sky-400 text-xs border border-sky-500/30 px-3 py-1 rounded-lg">Open Drive Folder →</a>
+      </div>
+
+      <div class="step-box rounded-r-xl p-4">
+        <p class="font-semibold text-white text-sm mb-1">Step 5 — Update Access Given</p>
+        <p class="text-slate-400 text-xs">Change <code class="text-sky-400">Access Given</code> column to <code class="text-emerald-400">YES</code>. Optionally send a confirmation WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Payments (from localStorage for demo) -->
+  <div class="mb-6">
+    <h2 class="font-sora font-semibold text-white text-lg mb-3">Recent Submissions (Local)</h2>
+    <div id="localPayments"></div>
+  </div>
+
+  <!-- Apps Script Setup Guide -->
+  <div class="mb-6">
+    <h2 class="font-sora font-semibold text-white text-lg mb-3">⚙️ Apps Script Setup</h2>
+    <div class="card-glass rounded-2xl p-4 space-y-3 text-sm text-slate-400">
+      <p>1. Open your Google Sheet → Extensions → Apps Script</p>
+      <p>2. Paste the Apps Script code from <code class="text-sky-400">apps-script.gs</code></p>
+      <p>3. Deploy → New deployment → Web App</p>
+      <p>4. Set "Who has access" to <code class="text-emerald-400">Anyone</code></p>
+      <p>5. Copy the deployment URL</p>
+      <p>6. Paste it in <code class="text-sky-400">script.js</code> → <code class="text-amber-400">CONFIG.APPS_SCRIPT_URL</code></p>
+    </div>
+  </div>
+
+  <!-- Reel Management -->
+  <div class="mb-6">
+    <h2 class="font-sora font-semibold text-white text-lg mb-3">🎬 Add Reels</h2>
+    <div class="card-glass rounded-2xl p-4 text-sm text-slate-400">
+      <p class="mb-2">Add reels by populating the <code class="text-sky-400">Reels_Data</code> sheet with columns:</p>
+      <div class="bg-slate-800 rounded-lg p-3 font-mono text-xs text-slate-300 overflow-x-auto">
+        ID | Topic | Class | Tags | Difficulty | Video URL
+      </div>
+      <p class="mt-2">Video URL format: <code class="text-emerald-400">https://www.youtube.com/embed/VIDEO_ID</code></p>
+    </div>
+  </div>
+
+  <!-- Fetch Live Data Button -->
+  <button onclick="fetchLivePayments()" id="fetchBtn"
+    class="w-full bg-sky-500 text-white font-semibold py-3.5 rounded-2xl mb-6 hover:bg-sky-400 transition">
+    🔄 Fetch Live Payments from Sheets
+  </button>
+  <div id="livePayments" class="mb-6"></div>
+
+</div>
+
+<script src="script.js"></script>
+<script>
+  // Admin password (CHANGE THIS in production)
+  const ADMIN_PASS = "vikas2024admin";
+
+  function checkAdminPass() {
+    const pass = document.getElementById("adminPassInput").value;
+    if (pass === ADMIN_PASS) {
+      sessionStorage.setItem("adminAuth", "true");
+      document.getElementById("adminLogin").classList.add("hidden");
+      document.getElementById("adminDash").classList.remove("hidden");
+      loadAdminData();
+    } else {
+      document.getElementById("adminErr").classList.remove("hidden");
+    }
+  }
+
+  function adminLogout() {
+    sessionStorage.removeItem("adminAuth");
+    document.getElementById("adminLogin").classList.remove("hidden");
+    document.getElementById("adminDash").classList.add("hidden");
+  }
+
+  // Check if already authed this session
+  if (sessionStorage.getItem("adminAuth") === "true") {
+    document.getElementById("adminLogin").classList.add("hidden");
+    document.getElementById("adminDash").classList.remove("hidden");
+    loadAdminData();
+  }
+
+  function loadAdminData() {
+    const pending = JSON.parse(localStorage.getItem("pwv_pending") || "[]");
+    document.getElementById("totalSubmissions").textContent = pending.length;
+    document.getElementById("pendingCount").textContent = pending.length;
+
+    const lp = document.getElementById("localPayments");
+    if (pending.length === 0) {
+      lp.innerHTML = `<div class="card-glass rounded-xl p-4 text-center"><p class="text-slate-500 text-sm">No local submissions yet.</p></div>`;
+    } else {
+      lp.innerHTML = pending.map(p => `
+        <div class="card-glass rounded-xl p-4 mb-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="font-semibold text-white text-sm">${p.name || "Unknown"}</p>
+              <p class="text-slate-400 text-xs">${p.email || "—"}</p>
+              <p class="text-slate-500 text-xs mt-0.5">Remark: <span class="text-amber-400 font-mono">${p.remark || "—"}</span></p>
+            </div>
+            <span class="text-xs bg-amber-500/10 border border-amber-500/30 text-amber-400 px-2 py-0.5 rounded-full flex-shrink-0">Pending</span>
+          </div>
+          <button onclick="markGranted(this,'${p.courseId}')" class="mt-2 text-xs bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-lg">
+            ✓ Grant Access (local)
+          </button>
+        </div>`).join("");
+    }
+  }
+
+  function markGranted(btn, courseId) {
+    Auth.addPurchase(courseId);
+    btn.closest(".card-glass").style.opacity = "0.5";
+    btn.textContent = "✓ Access Granted";
+    btn.disabled = true;
+    showToast("Access granted locally!", "success");
+  }
+  window.markGranted = markGranted;
+  window.checkAdminPass = checkAdminPass;
+  window.adminLogout = adminLogout;
+
+  async function fetchLivePayments() {
+    const btn = document.getElementById("fetchBtn");
+    btn.textContent = "⏳ Fetching...";
+    btn.disabled = true;
+    try {
+      const res = await fetch(CONFIG.APPS_SCRIPT_URL + "?action=getPayments");
+      const data = await res.json();
+      const lp = document.getElementById("livePayments");
+      if (data.payments && data.payments.length) {
+        lp.innerHTML = `<h3 class="font-sora font-semibold text-white mb-2">Live Payments (${data.payments.length})</h3>` +
+          data.payments.map(p => `<div class="card-glass rounded-xl p-3 mb-2 text-sm text-slate-300">${JSON.stringify(p)}</div>`).join("");
+      } else {
+        lp.innerHTML = `<p class="text-slate-500 text-sm text-center">No data returned. Check Apps Script URL.</p>`;
+      }
+    } catch {
+      showToast("Could not fetch. Check Apps Script URL.", "error");
+    }
+    btn.textContent = "🔄 Fetch Live Payments from Sheets";
+    btn.disabled = false;
+  }
+  window.fetchLivePayments = fetchLivePayments;
+</script>
+</body>
+</html>

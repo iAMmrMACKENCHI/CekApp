@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0284C7"/>
+  <title>Sign Up — Physics with Vikas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { sora:["Sora","sans-serif"], dm:["DM Sans","sans-serif"] },
+        colors: { primary:"#0284C7", dark:"#0F172A", card:"#1E293B" }
+      }}
+    }
+  </script>
+  <style>
+    body { font-family:"DM Sans",sans-serif; background:#0F172A; color:#fff; }
+    .input-field { background:#1E293B; border:1px solid #334155; color:#fff; transition:border-color .2s; }
+    .input-field:focus { outline:none; border-color:#0284C7; box-shadow:0 0 0 3px rgba(2,132,199,.15); }
+    .input-field::placeholder { color:#64748B; }
+    .hero-glow { background:radial-gradient(ellipse 60% 40% at 50% 0%, rgba(2,132,199,.3) 0%, transparent 60%); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<div class="hero-glow absolute inset-0 h-64 pointer-events-none"></div>
+
+<div class="relative z-10 flex flex-col min-h-screen px-5 max-w-md mx-auto w-full">
+
+  <!-- Header -->
+  <div class="pt-10 pb-8 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-sky-500 mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg shadow-sky-500/30">⚛️</div>
+    <h1 class="font-sora font-bold text-2xl">Create Account</h1>
+    <p class="text-slate-400 text-sm mt-1">Join 500+ students learning Physics</p>
+  </div>
+
+  <!-- Form -->
+  <form id="signupForm" class="space-y-4 flex-1" novalidate>
+
+    <div>
+      <label class="text-slate-300 text-sm font-medium block mb-2">Full Name</label>
+      <input id="name" type="text" placeholder="e.g. Rahul Sharma" required
+        class="input-field w-full px-4 py-3.5 rounded-xl text-base"/>
+      <p id="nameErr" class="text-red-400 text-xs mt-1 hidden">Please enter your full name</p>
+    </div>
+
+    <div>
+      <label class="text-slate-300 text-sm font-medium block mb-2">Phone Number</label>
+      <input id="phone" type="tel" placeholder="10-digit mobile number" maxlength="10" required
+        class="input-field w-full px-4 py-3.5 rounded-xl text-base"/>
+      <p id="phoneErr" class="text-red-400 text-xs mt-1 hidden">Enter a valid 10-digit number</p>
+    </div>
+
+    <div>
+      <label class="text-slate-300 text-sm font-medium block mb-2">Email Address</label>
+      <input id="email" type="email" placeholder="your@email.com" required
+        class="input-field w-full px-4 py-3.5 rounded-xl text-base"/>
+      <p id="emailErr" class="text-red-400 text-xs mt-1 hidden">Enter a valid email address</p>
+    </div>
+
+    <div>
+      <label class="text-slate-300 text-sm font-medium block mb-2">You are in</label>
+      <select id="classSelect" class="input-field w-full px-4 py-3.5 rounded-xl text-base">
+        <option value="">Select your class</option>
+        <option value="11">Class 11</option>
+        <option value="12">Class 12</option>
+        <option value="dropper">Dropper (Repeating)</option>
+      </select>
+    </div>
+
+    <div class="pt-2">
+      <button type="submit" id="signupBtn"
+        class="w-full bg-sky-500 hover:bg-sky-400 text-white font-sora font-semibold py-4 rounded-2xl text-base transition shadow-lg shadow-sky-500/30 relative overflow-hidden">
+        <span id="btnText">Create Account →</span>
+        <span id="btnLoader" class="hidden absolute inset-0 flex items-center justify-center">
+          <svg class="animate-spin w-5 h-5 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <p class="text-xs text-slate-500 text-center">
+      By signing up, you agree to receive course updates via WhatsApp/Email.
+    </p>
+  </form>
+
+  <!-- Login Link -->
+  <div class="py-8 text-center">
+    <p class="text-slate-400 text-sm">Already have an account?
+      <a href="login.html" class="text-sky-400 font-semibold ml-1">Login →</a>
+    </p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+  Auth.requireGuest();
+
+  document.getElementById("signupForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name  = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const cls   = document.getElementById("classSelect").value;
+
+    // Validate
+    let hasError = false;
+    const show = (id) => { document.getElementById(id).classList.remove("hidden"); hasError = true; };
+    const hide = (id) => document.getElementById(id).classList.add("hidden");
+
+    if (name.length < 2) show("nameErr"); else hide("nameErr");
+    if (!/^\d{10}$/.test(phone)) show("phoneErr"); else hide("phoneErr");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) show("emailErr"); else hide("emailErr");
+    if (hasError) return;
+
+    // UI: loading
+    document.getElementById("btnText").classList.add("hidden");
+    document.getElementById("btnLoader").classList.remove("hidden");
+    document.getElementById("signupBtn").disabled = true;
+
+    try {
+      await API.signupUser(name, phone, email);
+      Auth.setUser({ name, phone, email, class: cls });
+      if (cls) Prefs.set({ class: cls });
+      showToast("Account created! Welcome 🎉", "success");
+      setTimeout(() => { window.location.href = "dashboard.html"; }, 800);
+    } catch (err) {
+      // Even if API fails, save locally
+      Auth.setUser({ name, phone, email, class: cls });
+      if (cls) Prefs.set({ class: cls });
+      showToast("Account created (offline mode)!", "success");
+      setTimeout(() => { window.location.href = "dashboard.html"; }, 800);
+    }
+  });
+</script>
+</body>
+</html>

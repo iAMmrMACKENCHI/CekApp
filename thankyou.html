@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0284C7"/>
+  <title>Thank You — Physics with Vikas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sora:["Sora","sans-serif"], dm:["DM Sans","sans-serif"] } } }
+    }
+  </script>
+  <style>
+    body { font-family:"DM Sans",sans-serif; background:#0F172A; color:#fff; }
+    .card-glass { background:rgba(30,41,59,0.8); border:1px solid rgba(148,163,184,0.1); }
+    @keyframes bounce-in { 0%{transform:scale(0)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
+    .bounce-in { animation:bounce-in .5s ease-out forwards; }
+    @keyframes confetti { 0%{transform:translateY(-10px) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+    .confetti-piece { position:fixed; width:10px; height:10px; animation:confetti 3s ease-in forwards; z-index:0; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+<div class="flex-1 flex flex-col items-center justify-center px-5 py-10 max-w-md mx-auto w-full relative z-10">
+
+  <!-- Success Icon -->
+  <div class="bounce-in w-24 h-24 rounded-full bg-emerald-500 flex items-center justify-center text-5xl mb-6 shadow-2xl shadow-emerald-500/40">
+    ✓
+  </div>
+
+  <h1 class="font-sora font-extrabold text-3xl text-white text-center mb-2">Payment Submitted!</h1>
+  <p class="text-slate-400 text-sm text-center max-w-xs leading-relaxed mb-8">
+    Thank you! Your payment confirmation has been received. Vikas Sir will verify and grant access within <strong class="text-white">2–4 hours</strong>.
+  </p>
+
+  <!-- Info Cards -->
+  <div class="w-full space-y-3 mb-8">
+    <div class="card-glass rounded-2xl p-4 flex items-start gap-3">
+      <span class="text-2xl flex-shrink-0">📧</span>
+      <div>
+        <p class="font-semibold text-white text-sm">Check your email</p>
+        <p class="text-slate-400 text-xs mt-0.5">You'll receive a Google Drive link once access is granted.</p>
+      </div>
+    </div>
+    <div class="card-glass rounded-2xl p-4 flex items-start gap-3">
+      <span class="text-2xl flex-shrink-0">💬</span>
+      <div>
+        <p class="font-semibold text-white text-sm">WhatsApp Support</p>
+        <p class="text-slate-400 text-xs mt-0.5">For urgent queries, message Vikas Sir on WhatsApp.</p>
+      </div>
+    </div>
+    <div class="card-glass rounded-2xl p-4 flex items-start gap-3">
+      <span class="text-2xl flex-shrink-0">⏰</span>
+      <div>
+        <p class="font-semibold text-white text-sm">Access Timeline</p>
+        <p class="text-slate-400 text-xs mt-0.5">Mon–Sat 9AM–8PM. Access granted in 2–4 hours during this window.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="w-full space-y-3">
+    <a href="dashboard.html" class="w-full bg-sky-500 hover:bg-sky-400 text-white font-sora font-bold py-4 rounded-2xl text-center block transition shadow-lg shadow-sky-500/30">
+      Back to Dashboard
+    </a>
+    <a href="reels.html" class="w-full bg-slate-800 border border-slate-700 text-slate-300 font-medium py-3.5 rounded-2xl text-center block hover:border-sky-500/40 transition">
+      Watch Physics Reels while waiting 🎬
+    </a>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+  // Generate confetti
+  const colors = ["#0284C7","#22C55E","#F59E0B","#EC4899","#8B5CF6"];
+  for (let i = 0; i < 30; i++) {
+    const el = document.createElement("div");
+    el.className = "confetti-piece";
+    el.style.cssText = `left:${Math.random()*100}vw;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s;`;
+    document.body.appendChild(el);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0284C7"/>
+  <title>Buy Course — Physics with Vikas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { sora:["Sora","sans-serif"], dm:["DM Sans","sans-serif"] },
+        colors: { primary:"#0284C7", dark:"#0F172A", card:"#1E293B" }
+      }}
+    }
+  </script>
+  <style>
+    body { font-family:"DM Sans",sans-serif; background:#0F172A; color:#fff; }
+    .card-glass { background:rgba(30,41,59,0.8); border:1px solid rgba(148,163,184,0.1); }
+    .input-field { background:#1E293B; border:1px solid #334155; color:#fff; transition:border-color .2s; }
+    .input-field:focus { outline:none; border-color:#0284C7; box-shadow:0 0 0 3px rgba(2,132,199,.15); }
+    .input-field::placeholder { color:#64748B; }
+    .step-num { width:28px; height:28px; border-radius:50%; background:#0284C7; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0; }
+  </style>
+</head>
+<body class="min-h-screen pb-10">
+
+<div class="max-w-md mx-auto w-full px-5 pt-5">
+
+  <!-- Header -->
+  <div class="flex items-center gap-3 mb-6">
+    <a href="course-detail.html" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center">
+      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </a>
+    <div>
+      <h1 class="font-sora font-bold text-xl text-white">Complete Purchase</h1>
+      <p class="text-slate-400 text-xs" id="courseSubtitle">Physics Course</p>
+    </div>
+  </div>
+
+  <!-- Order Summary -->
+  <div class="card-glass rounded-2xl p-4 mb-6" id="orderCard">
+    <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">Order Summary</p>
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-xl bg-sky-500/20 flex items-center justify-center text-2xl" id="courseEmoji">⚡</div>
+      <div class="flex-1">
+        <p class="font-sora font-bold text-white text-sm" id="courseNameSummary">Course</p>
+        <p class="text-slate-400 text-xs" id="courseLevelSummary">Class 11</p>
+      </div>
+      <div class="text-right">
+        <p class="font-sora font-bold text-sky-400 text-lg" id="coursePriceSummary">₹2,499</p>
+        <p class="text-slate-500 text-xs line-through" id="courseOriginalSummary">₹4,999</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPI Payment Section -->
+  <div class="card-glass rounded-2xl p-5 mb-6">
+    <h2 class="font-sora font-semibold text-white mb-4">Pay via UPI</h2>
+
+    <!-- UPI ID -->
+    <div class="bg-sky-500/10 border border-sky-500/30 rounded-xl p-4 mb-4 text-center">
+      <p class="text-slate-400 text-xs mb-1">UPI ID</p>
+      <p class="font-sora font-bold text-sky-400 text-lg" id="upiId">physicswithvikas@upi</p>
+      <button onclick="copyUPI()" class="mt-2 text-sky-400 text-xs border border-sky-500/30 px-3 py-1 rounded-lg hover:bg-sky-500/10 transition">
+        📋 Copy UPI ID
+      </button>
+    </div>
+
+    <!-- QR Code Placeholder -->
+    <div class="bg-white rounded-2xl p-4 flex items-center justify-center mb-4" style="min-height:200px;">
+      <div class="text-center">
+        <div class="text-6xl mb-2">📱</div>
+        <p class="text-slate-800 text-sm font-medium">Scan with any UPI app</p>
+        <p class="text-slate-500 text-xs mt-1">PhonePe · GPay · Paytm · BHIM</p>
+        <!-- Replace the div above with an actual <img src="YOUR_QR_CODE.png"> -->
+        <p class="text-sky-600 text-xs mt-3 font-medium">Replace with actual QR code image</p>
+      </div>
+    </div>
+
+    <!-- Remark Instruction -->
+    <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3">
+      <p class="text-amber-300 text-xs font-semibold mb-1">⚠️ Important: Use this remark while paying</p>
+      <p class="font-mono text-amber-200 text-sm font-bold" id="remarkDisplay">PhysicsCourse_YourName</p>
+      <p class="text-amber-500/70 text-xs mt-1">Replace "YourName" with your actual name</p>
+    </div>
+  </div>
+
+  <!-- Confirmation Form -->
+  <div class="card-glass rounded-2xl p-5 mb-6">
+    <h2 class="font-sora font-semibold text-white mb-1">Confirm Your Payment</h2>
+    <p class="text-slate-400 text-xs mb-4">After paying, fill this form. Access will be granted within 2-4 hours.</p>
+
+    <form id="paymentForm" novalidate class="space-y-4">
+      <div>
+        <label class="text-slate-300 text-sm font-medium block mb-1.5">Full Name</label>
+        <input id="payName" type="text" placeholder="As per UPI account" required
+          class="input-field w-full px-4 py-3 rounded-xl text-sm"/>
+      </div>
+      <div>
+        <label class="text-slate-300 text-sm font-medium block mb-1.5">Phone Number</label>
+        <input id="payPhone" type="tel" placeholder="10-digit number" maxlength="10" required
+          class="input-field w-full px-4 py-3 rounded-xl text-sm"/>
+      </div>
+      <div>
+        <label class="text-slate-300 text-sm font-medium block mb-1.5">Email Address</label>
+        <input id="payEmail" type="email" placeholder="For course access" required
+          class="input-field w-full px-4 py-3 rounded-xl text-sm"/>
+      </div>
+      <div>
+        <label class="text-slate-300 text-sm font-medium block mb-1.5">UPI Transaction Remark</label>
+        <input id="payRemark" type="text" placeholder="PhysicsCourse_YourName" required
+          class="input-field w-full px-4 py-3 rounded-xl text-sm"/>
+        <p class="text-slate-500 text-xs mt-1">Exactly as you entered during UPI payment</p>
+      </div>
+
+      <p id="formError" class="text-red-400 text-xs hidden text-center">Please fill all fields correctly.</p>
+
+      <button type="submit" id="submitBtn"
+        class="w-full bg-sky-500 hover:bg-sky-400 text-white font-sora font-bold py-4 rounded-2xl text-base transition shadow-lg shadow-sky-500/30 relative overflow-hidden">
+        <span id="submitText">Submit & Confirm Payment ✓</span>
+        <span id="submitLoader" class="hidden absolute inset-0 flex items-center justify-center">
+          <svg class="animate-spin w-5 h-5 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z"/>
+          </svg>
+        </span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Steps -->
+  <div class="card-glass rounded-2xl p-5 mb-6">
+    <h3 class="font-sora font-semibold text-white mb-4">What happens next?</h3>
+    <div class="space-y-4">
+      <div class="flex gap-3">
+        <div class="step-num">1</div>
+        <div><p class="text-white text-sm font-medium">Pay via UPI</p><p class="text-slate-500 text-xs">Use UPI ID or QR code above</p></div>
+      </div>
+      <div class="flex gap-3">
+        <div class="step-num">2</div>
+        <div><p class="text-white text-sm font-medium">Fill the form</p><p class="text-slate-500 text-xs">Submit your payment confirmation</p></div>
+      </div>
+      <div class="flex gap-3">
+        <div class="step-num">3</div>
+        <div><p class="text-white text-sm font-medium">Admin verifies</p><p class="text-slate-500 text-xs">Within 2-4 hours (business hours)</p></div>
+      </div>
+      <div class="flex gap-3">
+        <div class="step-num">4</div>
+        <div><p class="text-white text-sm font-medium">Get access</p><p class="text-slate-500 text-xs">Drive link sent to your email</p></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+<script>
+  Auth.requireAuth();
+
+  const params = new URLSearchParams(window.location.search);
+  const courseId = params.get("id") || "c1";
+  const course = COURSES.find(c => c.id === courseId) || COURSES[0];
+  const emojis = { c1:"⚡", c2:"🔋" };
+
+  // Populate order summary
+  document.getElementById("courseSubtitle").textContent = course.title;
+  document.getElementById("courseNameSummary").textContent = course.title;
+  document.getElementById("courseLevelSummary").textContent = course.level;
+  document.getElementById("coursePriceSummary").textContent = `₹${course.price.toLocaleString()}`;
+  document.getElementById("courseOriginalSummary").textContent = `₹${course.originalPrice.toLocaleString()}`;
+  document.getElementById("courseEmoji").textContent = emojis[courseId] || "⚡";
+  document.getElementById("upiId").textContent = CONFIG.UPI_ID;
+
+  // Pre-fill from auth
+  const user = Auth.getUser();
+  if (user) {
+    document.getElementById("payName").value = user.name || "";
+    document.getElementById("payPhone").value = user.phone || "";
+    document.getElementById("payEmail").value = user.email || "";
+  }
+
+  function copyUPI() {
+    navigator.clipboard.writeText(CONFIG.UPI_ID).then(() => showToast("UPI ID copied!", "success"));
+  }
+  window.copyUPI = copyUPI;
+
+  document.getElementById("paymentForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name   = document.getElementById("payName").value.trim();
+    const phone  = document.getElementById("payPhone").value.trim();
+    const email  = document.getElementById("payEmail").value.trim();
+    const remark = document.getElementById("payRemark").value.trim();
+
+    if (!name || !/^\d{10}$/.test(phone) || !email.includes("@") || !remark) {
+      document.getElementById("formError").classList.remove("hidden");
+      return;
+    }
+    document.getElementById("formError").classList.add("hidden");
+
+    document.getElementById("submitText").classList.add("hidden");
+    document.getElementById("submitLoader").classList.remove("hidden");
+    document.getElementById("submitBtn").disabled = true;
+
+    try {
+      await API.submitPayment({
+        courseId,
+        courseName: course.title,
+        name, phone, email, remark,
+        timestamp: new Date().toISOString(),
+        amount: course.price,
+      });
+    } catch {}
+
+    // Save pending purchase to localStorage
+    const pending = JSON.parse(localStorage.getItem("pwv_pending") || "[]");
+    pending.push({ courseId, name, email, remark, ts: Date.now() });
+    localStorage.setItem("pwv_pending", JSON.stringify(pending));
+
+    setTimeout(() => {
+      window.location.href = `thankyou.html?id=${courseId}`;
+    }, 800);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0284C7"/>
+  <title>Courses — Physics with Vikas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { sora:["Sora","sans-serif"], dm:["DM Sans","sans-serif"] },
+        colors: { primary:"#0284C7", dark:"#0F172A", card:"#1E293B" }
+      }}
+    }
+  </script>
+  <style>
+    body { font-family:"DM Sans",sans-serif; background:#0F172A; color:#fff; }
+    .card-glass { background:rgba(30,41,59,0.8); border:1px solid rgba(148,163,184,0.1); }
+    .hero-glow { background:radial-gradient(ellipse 70% 30% at 50% 0%, rgba(2,132,199,.2) 0%, transparent 60%); }
+    .filter-pill { border:1px solid #334155; color:#94A3B8; cursor:pointer; transition:all .2s; }
+    .filter-pill.active { background:#0284C7; border-color:#0284C7; color:#fff; }
+  </style>
+</head>
+<body class="min-h-screen pb-24">
+<div class="hero-glow absolute inset-0 h-48 pointer-events-none"></div>
+
+<div class="relative z-10 max-w-md mx-auto w-full">
+
+  <!-- Header -->
+  <header class="px-5 pt-6 pb-4">
+    <h1 class="font-sora font-bold text-2xl text-white">Courses</h1>
+    <p class="text-slate-400 text-sm mt-1">Master Physics for JEE & Boards</p>
+  </header>
+
+  <!-- Filter Pills -->
+  <div class="px-5 flex gap-2 mb-5 overflow-x-auto pb-1">
+    <button onclick="filterCourses('all')" class="filter-pill active px-4 py-1.5 rounded-full text-sm font-medium flex-shrink-0" id="pill-all">All</button>
+    <button onclick="filterCourses('11')" class="filter-pill px-4 py-1.5 rounded-full text-sm font-medium flex-shrink-0" id="pill-11">Class 11</button>
+    <button onclick="filterCourses('12')" class="filter-pill px-4 py-1.5 rounded-full text-sm font-medium flex-shrink-0" id="pill-12">Class 12</button>
+  </div>
+
+  <!-- Offer Banner -->
+  <div class="mx-5 mb-5 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 rounded-2xl px-4 py-3 flex items-center gap-3">
+    <span class="text-2xl">🎁</span>
+    <div>
+      <p class="text-amber-300 font-semibold text-sm">50% OFF — Limited Time</p>
+      <p class="text-amber-500/70 text-xs">Use UPI remark: PhysicsCourse_YourName</p>
+    </div>
+  </div>
+
+  <!-- Courses List -->
+  <div class="px-5 space-y-5" id="coursesList">
+    <!-- Populated by JS -->
+  </div>
+
+</div>
+
+<!-- Bottom Nav -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-t border-slate-800">
+  <div class="flex justify-around py-3 max-w-md mx-auto">
+    <a href="dashboard.html" class="flex flex-col items-center gap-1 text-slate-500">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+      <span class="text-xs font-medium">Home</span>
+    </a>
+    <a href="reels.html" class="flex flex-col items-center gap-1 text-slate-500">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+      <span class="text-xs font-medium">Reels</span>
+    </a>
+    <a href="course.html" class="flex flex-col items-center gap-1 text-sky-400">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+      <span class="text-xs font-medium">Courses</span>
+    </a>
+    <a href="profile.html" class="flex flex-col items-center gap-1 text-slate-500">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      <span class="text-xs font-medium">Profile</span>
+    </a>
+  </div>
+</nav>
+
+<script src="script.js"></script>
+<script>
+  const gradients = {
+    c1: "from-sky-900 to-blue-950",
+    c2: "from-purple-900 to-indigo-950",
+  };
+  const emojis = { c1:"⚡", c2:"🔋" };
+
+  function renderCourses(list) {
+    const purchases = JSON.parse(localStorage.getItem("pwv_purchases") || "[]");
+    document.getElementById("coursesList").innerHTML = list.map(c => {
+      const owned = purchases.includes(c.id);
+      return `
+      <div class="card-glass rounded-2xl overflow-hidden">
+        <div class="h-40 bg-gradient-to-br ${gradients[c.id]||'from-sky-900 to-slate-900'} flex items-center justify-center relative">
+          <span class="text-7xl opacity-80">${emojis[c.id]||'⚡'}</span>
+          <div class="absolute top-3 left-3 bg-sky-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold">${c.level}</div>
+          ${owned ? '<div class="absolute top-3 right-3 bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold">✓ Enrolled</div>' : ''}
+        </div>
+        <div class="p-4">
+          <h3 class="font-sora font-bold text-white text-lg">${c.title}</h3>
+          <p class="text-slate-400 text-sm mt-1">${c.subtitle}</p>
+
+          <!-- Stats -->
+          <div class="flex gap-4 mt-3">
+            <div class="text-center">
+              <p class="font-sora font-bold text-white text-base">${c.lectures}</p>
+              <p class="text-slate-500 text-xs">Lectures</p>
+            </div>
+            <div class="w-px bg-slate-700"></div>
+            <div class="text-center">
+              <p class="font-sora font-bold text-white text-base">${c.chapters}</p>
+              <p class="text-slate-500 text-xs">Chapters</p>
+            </div>
+            <div class="w-px bg-slate-700"></div>
+            <div class="text-center">
+              <p class="font-sora font-bold text-white text-base">${c.duration}</p>
+              <p class="text-slate-500 text-xs">Duration</p>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-1.5 mt-3">
+            ${c.tags.map(t => `<span class="text-xs bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full">${t}</span>`).join("")}
+          </div>
+
+          <!-- Price & CTA -->
+          <div class="flex items-center justify-between mt-4">
+            <div>
+              <span class="text-sky-400 font-sora font-bold text-xl">₹${c.price.toLocaleString()}</span>
+              <span class="text-slate-500 text-sm line-through ml-2">₹${c.originalPrice.toLocaleString()}</span>
+              <span class="text-emerald-400 text-xs ml-2 font-semibold">50% OFF</span>
+            </div>
+            ${owned
+              ? `<a href="access.html?id=${c.id}" class="bg-emerald-500 text-white text-sm font-semibold px-4 py-2 rounded-xl">Access</a>`
+              : `<a href="course-detail.html?id=${c.id}" class="bg-sky-500 text-white text-sm font-semibold px-4 py-2 rounded-xl">View Details</a>`}
+          </div>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  let activeFilter = "all";
+  function filterCourses(filter) {
+    activeFilter = filter;
+    document.querySelectorAll("[id^='pill-']").forEach(p => p.classList.remove("active"));
+    document.getElementById(`pill-${filter}`).classList.add("active");
+    const list = filter === "all" ? COURSES : COURSES.filter(c => c.level.includes(filter));
+    renderCourses(list);
+  }
+
+  renderCourses(COURSES);
+</script>
+</body>
+</html>

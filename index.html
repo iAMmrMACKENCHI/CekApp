@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <meta name="theme-color" content="#0284C7"/>
+  <title>Physics with Vikas — Learn Physics for JEE & Boards</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { sora:["Sora","sans-serif"], dm:["DM Sans","sans-serif"] },
+        colors: { primary:"#0284C7", dark:"#0F172A", card:"#1E293B", muted:"#334155" }
+      }}
+    }
+  </script>
+  <style>
+    body { font-family:"DM Sans",sans-serif; background:#0F172A; color:#fff; }
+    .hero-glow { background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(2,132,199,0.35) 0%, transparent 60%); }
+    .card-glass { background: rgba(30,41,59,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(148,163,184,0.1); }
+    .shimmer { background: linear-gradient(90deg, #1E293B 25%, #334155 50%, #1E293B 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .float { animation: float 4s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .badge { background: linear-gradient(135deg, #0284C7, #0EA5E9); }
+  </style>
+</head>
+<body class="min-h-screen overflow-x-hidden">
+
+<!-- HERO ─────────────────────────────────────────────── -->
+<section class="relative min-h-screen flex flex-col">
+  <div class="hero-glow absolute inset-0 pointer-events-none"></div>
+
+  <!-- Top Bar -->
+  <header class="relative z-10 flex items-center justify-between px-5 pt-6 pb-2 max-w-md mx-auto w-full">
+    <div class="flex items-center gap-2">
+      <div class="w-9 h-9 rounded-xl bg-sky-500 flex items-center justify-center text-white font-bold font-sora text-lg">⚛</div>
+      <span class="font-sora font-bold text-white text-lg">Physics<span class="text-sky-400"> Vikas</span></span>
+    </div>
+    <a href="login.html" class="text-sm font-medium text-sky-400 border border-sky-500/40 px-4 py-1.5 rounded-full hover:bg-sky-500/10 transition">Login</a>
+  </header>
+
+  <!-- Hero Content -->
+  <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pb-10 max-w-md mx-auto w-full">
+    <div class="badge text-white text-xs font-semibold px-3 py-1 rounded-full mb-6 inline-block">🚀 JEE + Boards 2025-26</div>
+
+    <div class="float mb-6">
+      <div class="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center shadow-2xl shadow-sky-500/40">
+        <span class="text-5xl">⚛️</span>
+      </div>
+    </div>
+
+    <h1 class="font-sora font-extrabold text-4xl leading-tight mb-3">
+      Physics <span class="text-sky-400">explained</span><br/>like never before
+    </h1>
+    <p class="text-slate-400 text-base leading-relaxed mb-8 max-w-xs mx-auto font-dm">
+      Short concept reels → structured courses. No distractions, only learning.
+    </p>
+
+    <div class="flex flex-col gap-3 w-full max-w-xs">
+      <a href="signup.html" class="w-full bg-sky-500 hover:bg-sky-400 text-white font-sora font-semibold py-4 rounded-2xl text-center transition shadow-lg shadow-sky-500/30">
+        Start Learning Free →
+      </a>
+      <a href="reels.html" class="w-full card-glass text-slate-300 font-medium py-3.5 rounded-2xl text-center transition hover:border-sky-500/40">
+        🎥 Watch Physics Reels
+      </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="flex gap-6 mt-10">
+      <div class="text-center">
+        <div class="font-sora font-bold text-2xl text-white">500+</div>
+        <div class="text-xs text-slate-500 mt-0.5">Students</div>
+      </div>
+      <div class="w-px bg-slate-700"></div>
+      <div class="text-center">
+        <div class="font-sora font-bold text-2xl text-white">60+</div>
+        <div class="text-xs text-slate-500 mt-0.5">Lectures</div>
+      </div>
+      <div class="w-px bg-slate-700"></div>
+      <div class="text-center">
+        <div class="font-sora font-bold text-2xl text-white">4.9★</div>
+        <div class="text-xs text-slate-500 mt-0.5">Rating</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES ─────────────────────────────────────────── -->
+<section class="px-5 pb-16 max-w-md mx-auto">
+  <h2 class="font-sora font-bold text-2xl text-center mb-2">Why Physics with Vikas?</h2>
+  <p class="text-slate-400 text-sm text-center mb-8">Built for focused, distraction-free learning</p>
+
+  <div class="space-y-4">
+    <div class="card-glass rounded-2xl p-5 flex gap-4 items-start">
+      <div class="w-12 h-12 rounded-xl bg-sky-500/20 flex items-center justify-center text-2xl flex-shrink-0">🎬</div>
+      <div>
+        <h3 class="font-sora font-semibold text-white mb-1">Physics Reels</h3>
+        <p class="text-slate-400 text-sm">Concept clarity in 60 seconds. Educational-only, no distractions.</p>
+      </div>
+    </div>
+    <div class="card-glass rounded-2xl p-5 flex gap-4 items-start">
+      <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-2xl flex-shrink-0">📚</div>
+      <div>
+        <h3 class="font-sora font-semibold text-white mb-1">Structured Courses</h3>
+        <p class="text-slate-400 text-sm">Complete Class 11 & 12 Physics with notes, DPPs, and doubt support.</p>
+      </div>
+    </div>
+    <div class="card-glass rounded-2xl p-5 flex gap-4 items-start">
+      <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-2xl flex-shrink-0">🧪</div>
+      <div>
+        <h3 class="font-sora font-semibold text-white mb-1">Practice Problems</h3>
+        <p class="text-slate-400 text-sm">Daily practice sheets (DPP) aligned with JEE and Board patterns.</p>
+      </div>
+    </div>
+    <div class="card-glass rounded-2xl p-5 flex gap-4 items-start">
+      <div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-2xl flex-shrink-0">💬</div>
+      <div>
+        <h3 class="font-sora font-semibold text-white mb-1">Doubt Support</h3>
+        <p class="text-slate-400 text-sm">WhatsApp-based doubt resolution with Vikas Sir directly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES PREVIEW ─────────────────────────────────── -->
+<section class="px-5 pb-20 max-w-md mx-auto">
+  <div class="flex items-center justify-between mb-5">
+    <h2 class="font-sora font-bold text-2xl">Courses</h2>
+    <a href="course.html" class="text-sky-400 text-sm font-medium">See all →</a>
+  </div>
+
+  <div class="space-y-4">
+    <div class="card-glass rounded-2xl overflow-hidden">
+      <div class="h-36 bg-gradient-to-br from-sky-900 to-blue-950 flex items-center justify-center relative">
+        <span class="text-6xl">⚡</span>
+        <div class="absolute top-3 left-3 badge text-white text-xs px-2 py-0.5 rounded-full font-semibold">Class 11</div>
+      </div>
+      <div class="p-4">
+        <h3 class="font-sora font-bold text-white text-lg">JEE Physics Foundation</h3>
+        <p class="text-slate-400 text-sm mt-1">62 lectures · 14 chapters · 120 hrs</p>
+        <div class="flex items-center justify-between mt-4">
+          <div>
+            <span class="text-sky-400 font-sora font-bold text-xl">₹2,499</span>
+            <span class="text-slate-500 text-sm line-through ml-2">₹4,999</span>
+          </div>
+          <a href="course-detail.html?id=c1" class="bg-sky-500 text-white text-sm font-semibold px-4 py-2 rounded-xl">View Course</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-glass rounded-2xl overflow-hidden">
+      <div class="h-36 bg-gradient-to-br from-purple-900 to-indigo-950 flex items-center justify-center relative">
+        <span class="text-6xl">🔋</span>
+        <div class="absolute top-3 left-3 badge text-white text-xs px-2 py-0.5 rounded-full font-semibold">Class 12</div>
+      </div>
+      <div class="p-4">
+        <h3 class="font-sora font-bold text-white text-lg">JEE Physics Advanced</h3>
+        <p class="text-slate-400 text-sm mt-1">74 lectures · 16 chapters · 140 hrs</p>
+        <div class="flex items-center justify-between mt-4">
+          <div>
+            <span class="text-sky-400 font-sora font-bold text-xl">₹2,499</span>
+            <span class="text-slate-500 text-sm line-through ml-2">₹4,999</span>
+          </div>
+          <a href="course-detail.html?id=c2" class="bg-sky-500 text-white text-sm font-semibold px-4 py-2 rounded-xl">View Course</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER ──────────────────────────────────────────── -->
+<footer class="text-center text-slate-600 text-xs pb-10 px-5">
+  <p>© 2025 Physics with Vikas · Cek: Sabka Saath Sabka Vikas</p>
+  <p class="mt-1">Made with ❤️ for Indian students</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

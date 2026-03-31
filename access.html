@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0284C7"/>
+  <title>Course Access — Physics with Vikas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sora:["Sora","sans-serif"], dm:["DM Sans","sans-serif"] } } }
+    }
+  </script>
+  <style>
+    body { font-family:"DM Sans",sans-serif; background:#0F172A; color:#fff; }
+    .card-glass { background:rgba(30,41,59,0.8); border:1px solid rgba(148,163,184,0.1); }
+  </style>
+</head>
+<body class="min-h-screen pb-10">
+
+<div class="max-w-md mx-auto w-full px-5 pt-6">
+
+  <!-- Header -->
+  <div class="flex items-center gap-3 mb-6">
+    <a href="dashboard.html" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center">
+      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </a>
+    <h1 class="font-sora font-bold text-xl text-white">Course Access</h1>
+  </div>
+
+  <!-- Status Banner -->
+  <div id="accessGranted" class="hidden card-glass rounded-2xl p-5 mb-5 border border-emerald-500/30 bg-emerald-500/5">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-xl">✓</div>
+      <div>
+        <p class="font-sora font-bold text-emerald-400">Access Granted!</p>
+        <p class="text-slate-400 text-xs">Your enrollment is confirmed</p>
+      </div>
+    </div>
+    <p class="text-slate-300 text-sm">Your course materials are ready. Click the button below to access your Google Drive folder.</p>
+  </div>
+
+  <div id="accessPending" class="hidden card-glass rounded-2xl p-5 mb-5 border border-amber-500/30 bg-amber-500/5">
+    <div class="flex items-center gap-3 mb-2">
+      <span class="text-2xl">⏳</span>
+      <p class="font-sora font-bold text-amber-400">Access Pending</p>
+    </div>
+    <p class="text-slate-400 text-sm">Your payment is being verified. You'll receive access within 2–4 hours.</p>
+  </div>
+
+  <div id="accessNotPurchased" class="hidden card-glass rounded-2xl p-5 mb-5 border border-slate-600">
+    <p class="text-slate-400 text-sm text-center">You haven't enrolled in this course yet.</p>
+    <a id="buyLink" href="course.html" class="mt-3 w-full bg-sky-500 text-white font-semibold py-3 rounded-xl text-center block">
+      Buy Course →
+    </a>
+  </div>
+
+  <!-- Course Info -->
+  <div class="card-glass rounded-2xl p-4 mb-5" id="courseInfoBlock">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-xl bg-sky-500/20 flex items-center justify-center text-2xl" id="courseEmojiAccess">⚡</div>
+      <div>
+        <p class="font-sora font-bold text-white text-sm" id="courseNameAccess">Course</p>
+        <p class="text-slate-400 text-xs" id="courseLevelAccess">Class 11</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drive Access Button -->
+  <div id="driveSection" class="hidden mb-5">
+    <a id="driveLink" href="#" target="_blank" rel="noopener"
+      class="w-full bg-sky-500 hover:bg-sky-400 text-white font-sora font-bold py-4 rounded-2xl text-center flex items-center justify-center gap-2 transition shadow-lg shadow-sky-500/30 text-base">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm-1-11v4H8l4 4 4-4h-3V9h-2z"/></svg>
+      Open Google Drive Folder
+    </a>
+    <p class="text-slate-500 text-xs text-center mt-2">Opens in Google Drive. Make sure to use the email you registered with.</p>
+  </div>
+
+  <!-- What's in Your Drive -->
+  <div class="card-glass rounded-2xl p-5 mb-5">
+    <h2 class="font-sora font-semibold text-white mb-3">What's in your Drive folder?</h2>
+    <div class="space-y-2.5">
+      <div class="flex items-center gap-3">
+        <span class="text-xl">🎥</span>
+        <div>
+          <p class="text-white text-sm font-medium">Video Lectures</p>
+          <p class="text-slate-500 text-xs">HD quality, chapter-wise</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xl">📄</span>
+        <div>
+          <p class="text-white text-sm font-medium">PDF Notes</p>
+          <p class="text-slate-500 text-xs">Handwritten + typed notes</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xl">📝</span>
+        <div>
+          <p class="text-white text-sm font-medium">Daily Practice Problems (DPP)</p>
+          <p class="text-slate-500 text-xs">Chapter-wise practice sheets</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xl">✅</span>
+        <div>
+          <p class="text-white text-sm font-medium">DPP Solutions</p>
+          <p class="text-slate-500 text-xs">Detailed step-by-step solutions</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Doubt Support -->
+  <div class="card-glass rounded-2xl p-4">
+    <h3 class="font-sora font-semibold text-white mb-2">Need Help?</h3>
+    <p class="text-slate-400 text-sm mb-3">Message Vikas Sir directly for doubt support.</p>
+    <a href="https://wa.me/91XXXXXXXXXX?text=Hi+Sir,+I+need+help+with+Physics" target="_blank"
+      class="w-full bg-emerald-500 text-white font-semibold py-3 rounded-xl text-center flex items-center justify-center gap-2">
+      💬 WhatsApp Doubt Support
+    </a>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+<script>
+  Auth.requireAuth();
+
+  const params = new URLSearchParams(window.location.search);
+  const courseId = params.get("id") || "c1";
+  const course = COURSES.find(c => c.id === courseId) || COURSES[0];
+  const emojis = { c1:"⚡", c2:"🔋" };
+
+  document.getElementById("courseNameAccess").textContent = course.title;
+  document.getElementById("courseLevelAccess").textContent = course.level;
+  document.getElementById("courseEmojiAccess").textContent = emojis[courseId] || "⚡";
+
+  const purchased = Auth.hasPurchased(courseId);
+  const pending = (JSON.parse(localStorage.getItem("pwv_pending") || "[]")).some(p => p.courseId === courseId);
+
+  if (purchased) {
+    document.getElementById("accessGranted").classList.remove("hidden");
+    document.getElementById("driveSection").classList.remove("hidden");
+    document.getElementById("driveLink").href = CONFIG.DRIVE_FOLDER;
+  } else if (pending) {
+    document.getElementById("accessPending").classList.remove("hidden");
+  } else {
+    document.getElementById("accessNotPurchased").classList.remove("hidden");
+    document.getElementById("buyLink").href = `buy.html?id=${courseId}`;
+  }
+</script>
+</body>
+</html>

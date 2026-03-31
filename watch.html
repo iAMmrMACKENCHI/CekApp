@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#000000"/>
+  <title>Watch — Physics with Vikas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sora:["Sora","sans-serif"], dm:["DM Sans","sans-serif"] } } }
+    }
+  </script>
+  <style>
+    body { font-family:"DM Sans",sans-serif; background:#000; color:#fff; }
+    .card-glass { background:rgba(30,41,59,0.8); border:1px solid rgba(148,163,184,0.1); }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Back button -->
+  <div class="absolute top-5 left-5 z-10">
+    <a href="javascript:history.back()" class="w-9 h-9 rounded-xl bg-black/60 backdrop-blur flex items-center justify-center">
+      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- Video Embed -->
+  <div class="w-full" style="padding-top:56.25%;position:relative;">
+    <iframe id="watchIframe"
+      src=""
+      class="absolute inset-0 w-full h-full border-none"
+      allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;fullscreen"
+      allowfullscreen></iframe>
+  </div>
+
+  <!-- Info Section -->
+  <div class="px-5 py-5 max-w-md mx-auto">
+    <h1 class="font-sora font-bold text-xl text-white mb-1" id="watchTitle">—</h1>
+    <div class="flex items-center gap-2 mb-4">
+      <span class="text-xs bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full" id="watchClass">Class 11</span>
+      <span class="text-xs bg-slate-700 text-slate-400 px-2 py-0.5 rounded-full" id="watchDiff">Medium</span>
+    </div>
+
+    <!-- CTA -->
+    <div class="card-glass rounded-2xl p-4 mb-4">
+      <p class="text-slate-300 text-sm mb-3">Want the full lecture with notes and practice problems?</p>
+      <a href="course.html" class="w-full bg-sky-500 text-white font-semibold py-3 rounded-xl text-center block">
+        📚 View Full Course →
+      </a>
+    </div>
+
+    <!-- Related Reels -->
+    <h2 class="font-sora font-semibold text-white mb-3">More Physics Reels</h2>
+    <a href="reels.html" class="card-glass rounded-xl p-4 flex items-center gap-3 hover:border-sky-500/30 transition">
+      <span class="text-2xl">🎬</span>
+      <div class="flex-1">
+        <p class="text-white text-sm font-medium">Continue watching reels</p>
+        <p class="text-slate-500 text-xs">More concept clarity in 60 seconds</p>
+      </div>
+      <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+
+<script src="script.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const videoUrl = params.get("v") || "";
+  const title    = params.get("title") || "Physics Concept";
+  const cls      = params.get("class") || "11";
+  const diff     = params.get("diff") || "Medium";
+
+  if (videoUrl) {
+    const embedUrl = videoUrl.includes("embed/") ? videoUrl : videoUrl.replace("watch?v=","embed/") + "?autoplay=1&rel=0";
+    document.getElementById("watchIframe").src = embedUrl;
+  }
+  document.getElementById("watchTitle").textContent = decodeURIComponent(title);
+  document.getElementById("watchClass").textContent = `Class ${cls}`;
+  document.getElementById("watchDiff").textContent = diff;
+</script>
+</body>
+</html>
