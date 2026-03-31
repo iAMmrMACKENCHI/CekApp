@@ -114,13 +114,25 @@ const API = {
       console.warn("Apps Script URL not configured. Running in offline mode.");
       return { status: "ok", offline: true };
     }
-    const res = await fetch(CONFIG.APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action, ...payload }),
-    });
-    return res.json();
+
+    try {
+      // Send as GET with URL params — avoids CORS preflight entirely
+      const params = new URLSearchParams({
+        action,
+        data: JSON.stringify(payload)
+      });
+      
+      const res = await fetch(`${CONFIG.APPS_SCRIPT_URL}?${params.toString()}`, {
+        method: "GET",
+      });
+      
+      return res.json();
+    } catch (err) {
+      console.error("API error:", err);
+      return { status: "error", message: err.toString() };
+    }
   },
+
   async signupUser(name, phone, email) {
     return this.post("signup", { name, phone, email });
   },
@@ -136,7 +148,6 @@ const API = {
     }
   },
 };
-
 // ─── REELS ENGINE ─────────────────────────────────────────────
 const ReelsEngine = {
   data: [],
