@@ -15,217 +15,428 @@
   </script>
   <style>
     body { font-family:"DM Sans",sans-serif; background:#0F172A; color:#fff; }
-    .card-glass { background:rgba(30,41,59,0.8); border:1px solid rgba(148,163,184,0.1); }
+    .card-glass { background:rgba(30,41,59,0.85); border:1px solid rgba(148,163,184,0.12); }
     .input-field { background:#1E293B; border:1px solid #334155; color:#fff; }
-    .input-field:focus { outline:none; border-color:#0284C7; }
-    .step-box { background:#1E293B; border-left:3px solid #0284C7; }
+    .input-field:focus { outline:none; border-color:#0284C7; box-shadow:0 0 0 3px rgba(2,132,199,.15); }
+    .input-field::placeholder { color:#64748B; }
+    .tab-btn { transition:all .2s; border:1px solid #334155; color:#94A3B8; }
+    .tab-btn.active { background:#0284C7; color:#fff; border-color:#0284C7; }
+    .row-hover:hover { background:rgba(2,132,199,.06); }
+    .badge-pending  { background:rgba(245,158,11,.15); color:#FCD34D; border:1px solid rgba(245,158,11,.3); }
+    .badge-verified { background:rgba(34,197,94,.15);  color:#86EFAC; border:1px solid rgba(34,197,94,.3); }
+    .badge-granted  { background:rgba(2,132,199,.15);  color:#7DD3FC; border:1px solid rgba(2,132,199,.3); }
+    ::-webkit-scrollbar { width:4px; height:4px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:#334155; border-radius:4px; }
   </style>
 </head>
-<body class="min-h-screen pb-10">
+<body class="min-h-screen">
 
-<!-- Login Gate -->
+<!-- LOGIN GATE -->
 <div id="adminLogin" class="min-h-screen flex items-center justify-center px-5">
   <div class="w-full max-w-sm">
-    <div class="text-center mb-6">
-      <div class="w-16 h-16 rounded-2xl bg-red-500 mx-auto flex items-center justify-center text-3xl mb-3">🔐</div>
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 rounded-2xl bg-red-500/20 border border-red-500/30 mx-auto flex items-center justify-center text-3xl mb-4">🔐</div>
       <h1 class="font-sora font-bold text-xl text-white">Admin Access</h1>
-      <p class="text-slate-400 text-sm mt-1">Physics with Vikas — Admin Panel</p>
+      <p class="text-slate-400 text-sm mt-1">Physics with Vikas — Control Panel</p>
     </div>
     <input id="adminPassInput" type="password" placeholder="Admin password"
-      class="input-field w-full px-4 py-3 rounded-xl text-sm mb-3"/>
-    <button onclick="checkAdminPass()" class="w-full bg-sky-500 text-white font-bold py-3 rounded-xl">Enter</button>
-    <p class="text-red-400 text-xs text-center mt-2 hidden" id="adminErr">Wrong password</p>
+      class="input-field w-full px-4 py-3.5 rounded-xl text-sm mb-3"
+      onkeydown="if(event.key==='Enter') checkAdminPass()"/>
+    <button onclick="checkAdminPass()"
+      class="w-full bg-sky-500 hover:bg-sky-400 text-white font-sora font-bold py-4 rounded-2xl transition">
+      Enter Panel →
+    </button>
+    <p class="text-red-400 text-xs text-center mt-3 hidden" id="adminErr">Wrong password. Try again.</p>
+    <p class="text-slate-600 text-xs text-center mt-4">Default password: <code class="text-slate-500">vikas2024admin</code></p>
   </div>
 </div>
 
-<!-- Admin Dashboard -->
-<div id="adminDash" class="hidden max-w-md mx-auto w-full px-5 pt-6">
+<!-- ADMIN DASHBOARD -->
+<div id="adminDash" class="hidden min-h-screen">
 
-  <div class="flex items-center justify-between mb-6">
-    <div>
-      <h1 class="font-sora font-bold text-2xl text-white">Admin Panel</h1>
-      <p class="text-slate-400 text-sm">Physics with Vikas</p>
+  <!-- Top Bar -->
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center text-sm font-bold">⚛</div>
+      <span class="font-sora font-bold text-white">Admin Panel</span>
+      <span class="text-xs bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full">DEMO DATA</span>
     </div>
-    <button onclick="adminLogout()" class="text-xs bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-1.5 rounded-lg">Logout</button>
-  </div>
-
-  <!-- Stats Cards -->
-  <div class="grid grid-cols-2 gap-3 mb-6" id="statsGrid">
-    <div class="card-glass rounded-2xl p-4">
-      <p class="text-slate-400 text-xs mb-1">Total Submissions</p>
-      <p class="font-sora font-bold text-sky-400 text-2xl" id="totalSubmissions">—</p>
+    <div class="flex items-center gap-2">
+      <button onclick="DemoSeeder.clear()" class="text-xs text-slate-500 hover:text-slate-300 px-2 py-1 rounded transition hidden sm:block">Clear Demo</button>
+      <button onclick="adminLogout()" class="text-xs bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-1.5 rounded-lg">Logout</button>
     </div>
-    <div class="card-glass rounded-2xl p-4">
-      <p class="text-slate-400 text-xs mb-1">Pending Review</p>
-      <p class="font-sora font-bold text-amber-400 text-2xl" id="pendingCount">—</p>
+  </header>
+
+  <div class="max-w-2xl mx-auto px-4 pt-5 pb-20">
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+      <div class="card-glass rounded-2xl p-4 text-center">
+        <p class="font-sora font-bold text-2xl text-sky-400" id="stat-total">0</p>
+        <p class="text-slate-500 text-xs mt-0.5">Total</p>
+      </div>
+      <div class="card-glass rounded-2xl p-4 text-center">
+        <p class="font-sora font-bold text-2xl text-amber-400" id="stat-pending">0</p>
+        <p class="text-slate-500 text-xs mt-0.5">Pending</p>
+      </div>
+      <div class="card-glass rounded-2xl p-4 text-center">
+        <p class="font-sora font-bold text-2xl text-emerald-400" id="stat-verified">0</p>
+        <p class="text-slate-500 text-xs mt-0.5">Verified</p>
+      </div>
+      <div class="card-glass rounded-2xl p-4 text-center">
+        <p class="font-sora font-bold text-2xl text-purple-400" id="stat-revenue">₹0</p>
+        <p class="text-slate-500 text-xs mt-0.5">Revenue</p>
+      </div>
     </div>
-  </div>
 
-  <!-- Google Sheets Instructions -->
-  <div class="mb-6">
-    <h2 class="font-sora font-semibold text-white text-lg mb-3">📊 Google Sheets Workflow</h2>
+    <!-- Tabs -->
+    <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
+      <button onclick="switchTab('payments')" id="tab-payments" class="tab-btn active px-4 py-2 rounded-xl text-sm font-semibold flex-shrink-0">💳 Payments</button>
+      <button onclick="switchTab('users')"    id="tab-users"    class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold flex-shrink-0">👥 Students</button>
+      <button onclick="switchTab('setup')"    id="tab-setup"    class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold flex-shrink-0">⚙️ Setup</button>
+    </div>
 
-    <div class="space-y-3">
-      <div class="step-box rounded-r-xl p-4">
-        <p class="font-semibold text-white text-sm mb-1">Step 1 — Open Payments Sheet</p>
-        <p class="text-slate-400 text-xs">Go to your Google Sheet → Payments tab. New submissions appear here automatically.</p>
-        <a href="YOUR_GOOGLE_SHEET_URL_HERE" target="_blank" class="mt-2 inline-block text-sky-400 text-xs border border-sky-500/30 px-3 py-1 rounded-lg">Open Google Sheet →</a>
+    <!-- PAYMENTS TAB -->
+    <div id="tab-payments-content">
+      <div class="flex gap-2 mb-3">
+        <input id="searchPayments" type="text" placeholder="Search by name, phone, remark…"
+          class="input-field flex-1 px-3 py-2.5 rounded-xl text-sm" oninput="renderPaymentsTable()"/>
+        <select id="filterStatus" class="input-field px-3 py-2.5 rounded-xl text-sm flex-shrink-0" onchange="renderPaymentsTable()">
+          <option value="all">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="verified">Verified</option>
+          <option value="granted">Granted</option>
+        </select>
       </div>
 
-      <div class="step-box rounded-r-xl p-4">
-        <p class="font-semibold text-white text-sm mb-1">Step 2 — Verify Payment</p>
-        <p class="text-slate-400 text-xs">Check UPI remark in your PhonePe/GPay transaction history. Match with student's submitted remark.</p>
-        <div class="mt-2 bg-slate-800 rounded-lg p-2 text-xs font-mono text-slate-300">
-          Format: PhysicsCourse_[StudentName]
+      <!-- Table -->
+      <div class="card-glass rounded-t-2xl overflow-x-auto">
+        <table class="w-full min-w-[560px]">
+          <thead>
+            <tr class="border-b border-slate-700 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <th class="text-left px-4 py-3">Student</th>
+              <th class="text-left px-3 py-3">Course</th>
+              <th class="text-left px-3 py-3">UPI Remark</th>
+              <th class="text-left px-3 py-3">Status</th>
+              <th class="text-right px-4 py-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="paymentsTableBody" class="divide-y divide-slate-800/60">
+          </tbody>
+        </table>
+      </div>
+      <div class="card-glass rounded-b-2xl px-4 py-2.5 border-t border-slate-800 flex items-center justify-between">
+        <p class="text-slate-500 text-xs" id="tableCount">—</p>
+        <button onclick="fetchLivePayments()" id="fetchBtn"
+          class="text-xs text-sky-400 border border-sky-500/30 px-3 py-1.5 rounded-lg hover:bg-sky-500/10 transition">
+          🔄 Sync from Sheets
+        </button>
+      </div>
+
+      <!-- Workflow Guide -->
+      <div class="card-glass rounded-2xl p-4 mt-4">
+        <p class="font-sora font-semibold text-white text-sm mb-3">Verification Workflow</p>
+        <ol class="space-y-1.5 text-xs text-slate-400 list-decimal list-inside">
+          <li>Open PhonePe / GPay — check transaction history</li>
+          <li>Match the <span class="text-amber-300">UPI Remark</span> in the table above</li>
+          <li>Click <span class="text-emerald-400 font-semibold">Verify</span> → then <span class="text-sky-400 font-semibold">Grant Access</span></li>
+          <li>Share Drive folder with the student's Gmail address</li>
+          <li>Student gets access via <code class="text-sky-400">access.html</code></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- STUDENTS TAB -->
+    <div id="tab-users-content" class="hidden">
+      <div class="card-glass rounded-2xl overflow-x-auto">
+        <table class="w-full min-w-[420px]">
+          <thead>
+            <tr class="border-b border-slate-700 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <th class="text-left px-4 py-3">Name</th>
+              <th class="text-left px-4 py-3">Phone / Email</th>
+              <th class="text-left px-4 py-3">Class</th>
+              <th class="text-right px-4 py-3">Enrolled</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody" class="divide-y divide-slate-800/60"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETUP TAB -->
+    <div id="tab-setup-content" class="hidden space-y-4">
+      <div class="card-glass rounded-2xl p-4">
+        <p class="font-sora font-semibold text-white text-sm mb-1">Apps Script URL</p>
+        <p class="text-slate-500 text-xs mb-2">Enables live data sync from Google Sheets.</p>
+        <input id="appsScriptInput" type="url" placeholder="https://script.google.com/macros/s/…/exec"
+          class="input-field w-full px-3 py-2.5 rounded-xl text-sm mb-2"/>
+        <button onclick="saveAppsScriptUrl()" class="w-full bg-sky-500 text-white font-semibold py-2.5 rounded-xl text-sm">Save URL</button>
+      </div>
+      <div class="card-glass rounded-2xl p-4">
+        <p class="font-sora font-semibold text-white text-sm mb-1">UPI ID</p>
+        <input id="upiInput" type="text" placeholder="yourname@upi" value="physicswithvikas@upi"
+          class="input-field w-full px-3 py-2.5 rounded-xl text-sm mb-2"/>
+        <button onclick="saveUpiId()" class="w-full bg-emerald-500 text-white font-semibold py-2.5 rounded-xl text-sm">Save UPI ID</button>
+      </div>
+      <div class="card-glass rounded-2xl p-4">
+        <p class="font-sora font-semibold text-white text-sm mb-1">Google Drive Folder Link</p>
+        <input id="driveInput" type="url" placeholder="https://drive.google.com/drive/folders/…"
+          class="input-field w-full px-3 py-2.5 rounded-xl text-sm mb-2"/>
+        <button onclick="saveDriveLink()" class="w-full bg-purple-500 text-white font-semibold py-2.5 rounded-xl text-sm">Save Drive Link</button>
+      </div>
+      <div class="card-glass rounded-2xl p-4">
+        <p class="font-sora font-semibold text-white text-sm mb-3">Setup Checklist</p>
+        <div class="space-y-2 text-xs text-slate-400">
+          <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="mt-0.5 flex-shrink-0"/> Create Google Sheet with tabs: Users, Payments, Reels_Data</label>
+          <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="mt-0.5 flex-shrink-0"/> Paste apps-script.gs into Extensions → Apps Script</label>
+          <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="mt-0.5 flex-shrink-0"/> Set SHEET_ID in the Apps Script code</label>
+          <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="mt-0.5 flex-shrink-0"/> Deploy → Web App → Anyone → Copy URL → Save above</label>
+          <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="mt-0.5 flex-shrink-0"/> Replace QR code image in buy.html</label>
+          <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="mt-0.5 flex-shrink-0"/> Change ADMIN_PASS in admin.html before going live</label>
+          <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="mt-0.5 flex-shrink-0"/> Upload all files to GitHub Pages / Netlify / Vercel</label>
         </div>
       </div>
-
-      <div class="step-box rounded-r-xl p-4">
-        <p class="font-semibold text-white text-sm mb-1">Step 3 — Update Sheet</p>
-        <p class="text-slate-400 text-xs">In Payments sheet, change the <code class="text-sky-400">Verified</code> column to <code class="text-emerald-400">YES</code> for verified payments.</p>
-      </div>
-
-      <div class="step-box rounded-r-xl p-4">
-        <p class="font-semibold text-white text-sm mb-1">Step 4 — Grant Drive Access</p>
-        <p class="text-slate-400 text-xs">Open Google Drive folder → Right-click → Share → Add the student's Gmail address with Viewer access.</p>
-        <a href="YOUR_GOOGLE_DRIVE_FOLDER_URL" target="_blank" class="mt-2 inline-block text-sky-400 text-xs border border-sky-500/30 px-3 py-1 rounded-lg">Open Drive Folder →</a>
-      </div>
-
-      <div class="step-box rounded-r-xl p-4">
-        <p class="font-semibold text-white text-sm mb-1">Step 5 — Update Access Given</p>
-        <p class="text-slate-400 text-xs">Change <code class="text-sky-400">Access Given</code> column to <code class="text-emerald-400">YES</code>. Optionally send a confirmation WhatsApp.</p>
-      </div>
+      <button onclick="DemoSeeder.clear()" class="w-full bg-red-500/10 border border-red-500/30 text-red-400 py-3 rounded-xl text-sm font-medium">
+        🗑 Clear Demo Data
+      </button>
     </div>
+
   </div>
+</div>
 
-  <!-- Recent Payments (from localStorage for demo) -->
-  <div class="mb-6">
-    <h2 class="font-sora font-semibold text-white text-lg mb-3">Recent Submissions (Local)</h2>
-    <div id="localPayments"></div>
+<!-- Detail Modal -->
+<div id="detailModal" class="fixed inset-0 z-[300] bg-black/70 backdrop-blur-sm hidden items-end justify-center">
+  <div class="w-full max-w-md bg-slate-900 border-t border-slate-700 rounded-t-3xl p-6">
+    <div class="w-10 h-1 bg-slate-700 rounded-full mx-auto mb-5"></div>
+    <h3 class="font-sora font-bold text-white text-lg mb-4" id="modalTitle">Payment Detail</h3>
+    <div id="modalContent" class="space-y-3 text-sm mb-5"></div>
+    <div class="flex gap-2 mb-3" id="modalActions"></div>
+    <button onclick="closeModal()" class="w-full bg-slate-800 text-slate-300 py-3 rounded-xl text-sm">Close</button>
   </div>
-
-  <!-- Apps Script Setup Guide -->
-  <div class="mb-6">
-    <h2 class="font-sora font-semibold text-white text-lg mb-3">⚙️ Apps Script Setup</h2>
-    <div class="card-glass rounded-2xl p-4 space-y-3 text-sm text-slate-400">
-      <p>1. Open your Google Sheet → Extensions → Apps Script</p>
-      <p>2. Paste the Apps Script code from <code class="text-sky-400">apps-script.gs</code></p>
-      <p>3. Deploy → New deployment → Web App</p>
-      <p>4. Set "Who has access" to <code class="text-emerald-400">Anyone</code></p>
-      <p>5. Copy the deployment URL</p>
-      <p>6. Paste it in <code class="text-sky-400">script.js</code> → <code class="text-amber-400">CONFIG.APPS_SCRIPT_URL</code></p>
-    </div>
-  </div>
-
-  <!-- Reel Management -->
-  <div class="mb-6">
-    <h2 class="font-sora font-semibold text-white text-lg mb-3">🎬 Add Reels</h2>
-    <div class="card-glass rounded-2xl p-4 text-sm text-slate-400">
-      <p class="mb-2">Add reels by populating the <code class="text-sky-400">Reels_Data</code> sheet with columns:</p>
-      <div class="bg-slate-800 rounded-lg p-3 font-mono text-xs text-slate-300 overflow-x-auto">
-        ID | Topic | Class | Tags | Difficulty | Video URL
-      </div>
-      <p class="mt-2">Video URL format: <code class="text-emerald-400">https://www.youtube.com/embed/VIDEO_ID</code></p>
-    </div>
-  </div>
-
-  <!-- Fetch Live Data Button -->
-  <button onclick="fetchLivePayments()" id="fetchBtn"
-    class="w-full bg-sky-500 text-white font-semibold py-3.5 rounded-2xl mb-6 hover:bg-sky-400 transition">
-    🔄 Fetch Live Payments from Sheets
-  </button>
-  <div id="livePayments" class="mb-6"></div>
-
 </div>
 
 <script src="script.js"></script>
 <script>
-  // Admin password (CHANGE THIS in production)
-  const ADMIN_PASS = "vikas2024admin";
+const ADMIN_PASS = "vikas2024admin"; // ← CHANGE THIS
 
-  function checkAdminPass() {
-    const pass = document.getElementById("adminPassInput").value;
-    if (pass === ADMIN_PASS) {
-      sessionStorage.setItem("adminAuth", "true");
-      document.getElementById("adminLogin").classList.add("hidden");
-      document.getElementById("adminDash").classList.remove("hidden");
-      loadAdminData();
-    } else {
-      document.getElementById("adminErr").classList.remove("hidden");
-    }
-  }
-
-  function adminLogout() {
-    sessionStorage.removeItem("adminAuth");
-    document.getElementById("adminLogin").classList.remove("hidden");
-    document.getElementById("adminDash").classList.add("hidden");
-  }
-
-  // Check if already authed this session
-  if (sessionStorage.getItem("adminAuth") === "true") {
+function checkAdminPass() {
+  if (document.getElementById("adminPassInput").value === ADMIN_PASS) {
+    sessionStorage.setItem("adminAuth","1");
     document.getElementById("adminLogin").classList.add("hidden");
     document.getElementById("adminDash").classList.remove("hidden");
-    loadAdminData();
+    initAdmin();
+  } else {
+    document.getElementById("adminErr").classList.remove("hidden");
+    document.getElementById("adminPassInput").value = "";
+  }
+}
+function adminLogout() { sessionStorage.removeItem("adminAuth"); location.reload(); }
+window.checkAdminPass = checkAdminPass;
+window.adminLogout    = adminLogout;
+
+function switchTab(name) {
+  ["payments","users","setup"].forEach(t => {
+    document.getElementById(`tab-${t}-content`).classList.add("hidden");
+    document.getElementById(`tab-${t}`).classList.remove("active");
+  });
+  document.getElementById(`tab-${name}-content`).classList.remove("hidden");
+  document.getElementById(`tab-${name}`).classList.add("active");
+  if (name === "users") renderUsersTable();
+}
+window.switchTab = switchTab;
+
+// ── DATA ─────────────────────────────────────────────────────────
+function getPayments() { return JSON.parse(localStorage.getItem("pwv_pending") || "[]"); }
+function savePayments(arr) { localStorage.setItem("pwv_pending", JSON.stringify(arr)); }
+
+// ── PAYMENTS TABLE ────────────────────────────────────────────────
+function renderPaymentsTable() {
+  const payments     = getPayments();
+  const search       = (document.getElementById("searchPayments").value || "").toLowerCase();
+  const statusFilter = document.getElementById("filterStatus").value || "all";
+
+  const filtered = payments.filter(p => {
+    const s = p.accessGranted ? "granted" : p.verified ? "verified" : "pending";
+    const q = !search || ["name","phone","email","remark"].some(k => (p[k]||"").toLowerCase().includes(search));
+    return q && (statusFilter === "all" || s === statusFilter);
+  });
+
+  document.getElementById("tableCount").textContent = `${filtered.length} entr${filtered.length===1?"y":"ies"}`;
+  const tbody = document.getElementById("paymentsTableBody");
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center">
+      <p class="text-3xl mb-2">📭</p>
+      <p class="text-slate-400 text-sm">No submissions found.</p>
+      <p class="text-slate-600 text-xs mt-1">Real entries appear after students pay and submit the form.</p>
+    </td></tr>`;
+    return;
   }
 
-  function loadAdminData() {
-    const pending = JSON.parse(localStorage.getItem("pwv_pending") || "[]");
-    document.getElementById("totalSubmissions").textContent = pending.length;
-    document.getElementById("pendingCount").textContent = pending.length;
+  tbody.innerHTML = filtered.map(p => {
+    const origIdx = payments.indexOf(p);
+    const course  = COURSES.find(c => c.id === p.courseId);
+    const status  = p.accessGranted ? "granted" : p.verified ? "verified" : "pending";
+    const badge   = { pending:`<span class="badge-pending inline-flex text-xs px-2 py-0.5 rounded-full">⏳ Pending</span>`, verified:`<span class="badge-verified inline-flex text-xs px-2 py-0.5 rounded-full">✓ Verified</span>`, granted:`<span class="badge-granted inline-flex text-xs px-2 py-0.5 rounded-full">🔓 Granted</span>` }[status];
+    return `<tr class="row-hover border-b border-slate-800/40">
+      <td class="px-4 py-3">
+        <p class="text-white text-sm font-medium">${p.name||"—"}</p>
+        <p class="text-slate-500 text-xs">${p.phone||""}</p>
+        <p class="text-slate-600 text-xs">${formatTime(p.ts)}</p>
+      </td>
+      <td class="px-3 py-3">
+        <p class="text-slate-300 text-xs">${course ? course.subtitle : "—"}</p>
+        <p class="text-sky-400 text-xs font-semibold">₹${course ? course.price.toLocaleString() : "2,499"}</p>
+      </td>
+      <td class="px-3 py-3">
+        <p class="font-mono text-xs text-amber-300 max-w-[110px] truncate" title="${p.remark||""}">${p.remark||"—"}</p>
+        <p class="text-slate-600 text-xs truncate max-w-[110px]">${p.email||""}</p>
+      </td>
+      <td class="px-3 py-3">${badge}</td>
+      <td class="px-4 py-3 text-right">
+        <div class="flex flex-col items-end gap-1">
+          <button onclick="openDetail(${origIdx})" class="text-xs text-slate-400 hover:text-white underline">Detail</button>
+          ${!p.verified ? `<button onclick="verifyPayment(${origIdx})" class="text-xs text-emerald-400 font-semibold hover:text-emerald-300">✓ Verify</button>` : ""}
+          ${p.verified && !p.accessGranted ? `<button onclick="grantAccess(${origIdx})" class="text-xs text-sky-400 font-semibold hover:text-sky-300">🔓 Grant</button>` : ""}
+        </div>
+      </td>
+    </tr>`;
+  }).join("");
+}
 
-    const lp = document.getElementById("localPayments");
-    if (pending.length === 0) {
-      lp.innerHTML = `<div class="card-glass rounded-xl p-4 text-center"><p class="text-slate-500 text-sm">No local submissions yet.</p></div>`;
-    } else {
-      lp.innerHTML = pending.map(p => `
-        <div class="card-glass rounded-xl p-4 mb-2">
-          <div class="flex items-start justify-between">
-            <div>
-              <p class="font-semibold text-white text-sm">${p.name || "Unknown"}</p>
-              <p class="text-slate-400 text-xs">${p.email || "—"}</p>
-              <p class="text-slate-500 text-xs mt-0.5">Remark: <span class="text-amber-400 font-mono">${p.remark || "—"}</span></p>
-            </div>
-            <span class="text-xs bg-amber-500/10 border border-amber-500/30 text-amber-400 px-2 py-0.5 rounded-full flex-shrink-0">Pending</span>
-          </div>
-          <button onclick="markGranted(this,'${p.courseId}')" class="mt-2 text-xs bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-lg">
-            ✓ Grant Access (local)
-          </button>
-        </div>`).join("");
-    }
-  }
+// ── USERS TABLE ───────────────────────────────────────────────────
+function renderUsersTable() {
+  const users = JSON.parse(localStorage.getItem("pwv_all_users") || "[]");
+  const tbody = document.getElementById("usersTableBody");
+  const labels = { "11":"Class 11", "12":"Class 12", "dropper":"Dropper" };
 
-  function markGranted(btn, courseId) {
-    Auth.addPurchase(courseId);
-    btn.closest(".card-glass").style.opacity = "0.5";
-    btn.textContent = "✓ Access Granted";
-    btn.disabled = true;
-    showToast("Access granted locally!", "success");
+  if (!users.length) {
+    tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-slate-500 text-sm">No students registered yet.</td></tr>`;
+    return;
   }
-  window.markGranted = markGranted;
-  window.checkAdminPass = checkAdminPass;
-  window.adminLogout = adminLogout;
+  tbody.innerHTML = users.map(u => `
+    <tr class="row-hover border-b border-slate-800/40">
+      <td class="px-4 py-3">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-sky-500/20 text-sky-400 text-xs font-bold flex items-center justify-center flex-shrink-0">${(u.name||"?")[0].toUpperCase()}</div>
+          <span class="text-white text-sm">${u.name||"—"}</span>
+        </div>
+      </td>
+      <td class="px-4 py-3">
+        <p class="text-slate-300 text-xs">${u.phone||"—"}</p>
+        <p class="text-slate-500 text-xs">${u.email||""}</p>
+      </td>
+      <td class="px-4 py-3"><span class="text-slate-300 text-xs">${labels[u.class]||u.class||"—"}</span></td>
+      <td class="px-4 py-3 text-right"><span class="text-slate-600 text-xs">—</span></td>
+    </tr>`).join("");
+}
 
-  async function fetchLivePayments() {
-    const btn = document.getElementById("fetchBtn");
-    btn.textContent = "⏳ Fetching...";
-    btn.disabled = true;
-    try {
-      const res = await fetch(CONFIG.APPS_SCRIPT_URL + "?action=getPayments");
-      const data = await res.json();
-      const lp = document.getElementById("livePayments");
-      if (data.payments && data.payments.length) {
-        lp.innerHTML = `<h3 class="font-sora font-semibold text-white mb-2">Live Payments (${data.payments.length})</h3>` +
-          data.payments.map(p => `<div class="card-glass rounded-xl p-3 mb-2 text-sm text-slate-300">${JSON.stringify(p)}</div>`).join("");
-      } else {
-        lp.innerHTML = `<p class="text-slate-500 text-sm text-center">No data returned. Check Apps Script URL.</p>`;
-      }
-    } catch {
-      showToast("Could not fetch. Check Apps Script URL.", "error");
-    }
-    btn.textContent = "🔄 Fetch Live Payments from Sheets";
-    btn.disabled = false;
+// ── STATS ─────────────────────────────────────────────────────────
+function updateStats() {
+  const p = getPayments();
+  document.getElementById("stat-total").textContent    = p.length;
+  document.getElementById("stat-pending").textContent  = p.filter(x=>!x.verified).length;
+  document.getElementById("stat-verified").textContent = p.filter(x=>x.verified).length;
+  document.getElementById("stat-revenue").textContent  = `₹${(p.filter(x=>x.verified).length * 2499).toLocaleString()}`;
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────
+function verifyPayment(idx) {
+  const arr = getPayments(); arr[idx].verified = true; arr[idx].verifiedAt = Date.now();
+  savePayments(arr); renderPaymentsTable(); updateStats();
+  showToast("Payment verified ✓", "success");
+}
+function grantAccess(idx) {
+  const arr = getPayments(); arr[idx].accessGranted = true; arr[idx].grantedAt = Date.now();
+  savePayments(arr);
+  if (arr[idx].courseId) Auth.addPurchase(arr[idx].courseId);
+  renderPaymentsTable(); updateStats();
+  showToast("Access granted 🔓", "success");
+}
+window.verifyPayment = verifyPayment;
+window.grantAccess   = grantAccess;
+
+// ── DETAIL MODAL ──────────────────────────────────────────────────
+function openDetail(idx) {
+  const p = getPayments()[idx]; if (!p) return;
+  const course = COURSES.find(c=>c.id===p.courseId);
+  const status = p.accessGranted?"Access Granted":p.verified?"Verified":"Pending";
+  document.getElementById("modalTitle").textContent = p.name||"Payment";
+  document.getElementById("modalContent").innerHTML = `<div class="grid grid-cols-2 gap-3">
+    ${[["Name",p.name||"—"],["Phone",p.phone||"—"],["Email",p.email||"—"],
+       ["UPI Remark",`<span class='font-mono text-amber-300 text-xs'>${p.remark||"—"}</span>`],
+       ["Course",course?.title||"—"],["Amount",`₹${course?.price?.toLocaleString()||"2,499"}`],
+       ["Status",`<span class='text-emerald-400 font-semibold'>${status}</span>`],
+       ["Time",formatTime(p.ts)]
+    ].map(([k,v])=>`<div><p class='text-slate-500 text-xs'>${k}</p><p class='text-white text-sm mt-0.5'>${v}</p></div>`).join("")}
+  </div>`;
+  const ma = document.getElementById("modalActions"); ma.innerHTML="";
+  if (!p.verified) {
+    const b=document.createElement("button"); b.className="flex-1 bg-emerald-500 text-white font-semibold py-3 rounded-xl text-sm";
+    b.textContent="✓ Verify"; b.onclick=()=>{verifyPayment(idx);closeModal();}; ma.appendChild(b);
   }
-  window.fetchLivePayments = fetchLivePayments;
+  if (p.verified&&!p.accessGranted) {
+    const b=document.createElement("button"); b.className="flex-1 bg-sky-500 text-white font-semibold py-3 rounded-xl text-sm";
+    b.textContent="🔓 Grant Access"; b.onclick=()=>{grantAccess(idx);closeModal();}; ma.appendChild(b);
+  }
+  document.getElementById("detailModal").classList.remove("hidden");
+  document.getElementById("detailModal").classList.add("flex");
+}
+function closeModal() {
+  document.getElementById("detailModal").classList.add("hidden");
+  document.getElementById("detailModal").classList.remove("flex");
+}
+window.openDetail = openDetail; window.closeModal = closeModal;
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function formatTime(ts) {
+  if (!ts) return "—";
+  const m=Math.floor((Date.now()-ts)/60000);
+  if (m<1) return "Just now"; if (m<60) return `${m}m ago`;
+  const h=Math.floor(m/60); if (h<24) return `${h}h ago`;
+  return `${Math.floor(h/24)}d ago`;
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────
+function saveAppsScriptUrl() { const v=document.getElementById("appsScriptInput").value.trim(); if(!v)return; localStorage.setItem("pwv_override_script_url",v); showToast("URL saved!","success"); }
+function saveUpiId()         { const v=document.getElementById("upiInput").value.trim();         if(!v)return; localStorage.setItem("pwv_override_upi",v);        showToast("UPI ID saved!","success"); }
+function saveDriveLink()     { const v=document.getElementById("driveInput").value.trim();       if(!v)return; localStorage.setItem("pwv_override_drive",v);      showToast("Drive link saved!","success"); }
+window.saveAppsScriptUrl=saveAppsScriptUrl; window.saveUpiId=saveUpiId; window.saveDriveLink=saveDriveLink;
+
+// ── LIVE FETCH ────────────────────────────────────────────────────
+async function fetchLivePayments() {
+  const url = localStorage.getItem("pwv_override_script_url") || CONFIG.APPS_SCRIPT_URL;
+  if (!url||url.includes("YOUR_")) { showToast("Set Apps Script URL in Setup tab first.","warning"); return; }
+  const btn=document.getElementById("fetchBtn"); btn.textContent="⏳ Syncing…"; btn.disabled=true;
+  try {
+    const res=await fetch(`${url}?action=getPayments`);
+    const data=await res.json();
+    if (data.payments?.length) {
+      const arr=getPayments();
+      data.payments.forEach(p => {
+        if (!arr.find(e=>e.remark===p.UPI_Remark&&e.email===p.Email))
+          arr.push({name:p.Name,phone:p.Phone,email:p.Email,remark:p.UPI_Remark,courseId:p.Course_ID,ts:new Date(p.Timestamp).getTime(),verified:p.Verified==="YES",accessGranted:p.Access_Given==="YES"});
+      });
+      savePayments(arr); renderPaymentsTable(); updateStats();
+      showToast(`Synced ${data.payments.length} entries ✓`,"success");
+    } else { showToast("No new data.","info"); }
+  } catch { showToast("Sync failed. Check Apps Script URL.","error"); }
+  btn.textContent="🔄 Sync from Sheets"; btn.disabled=false;
+}
+window.fetchLivePayments=fetchLivePayments;
+
+// ── INIT ──────────────────────────────────────────────────────────
+function initAdmin() {
+  renderPaymentsTable();
+  updateStats();
+  const sv=localStorage.getItem("pwv_override_script_url"); if(sv) document.getElementById("appsScriptInput").value=sv;
+  const sd=localStorage.getItem("pwv_override_drive");      if(sd) document.getElementById("driveInput").value=sd;
+  const su=localStorage.getItem("pwv_override_upi");        if(su) document.getElementById("upiInput").value=su;
+}
+
+// Wait for script.js DOMContentLoaded (which seeds demo data) then load admin
+setTimeout(()=>{ if(sessionStorage.getItem("adminAuth")==="1") initAdmin(); }, 80);
 </script>
 </body>
 </html>
