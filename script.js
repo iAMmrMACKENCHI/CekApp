@@ -169,7 +169,6 @@ const ReelsEngine = {
 // ─── UX CONTROLS ─────────────────────────────────────────────
 const UXControls = {
   init() {
-     const isAdmin = window.location.pathname.includes("admin") ||  sessionStorage.getItem("adminAuth") === "1";  if (isAdmin) return;
     document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("selectstart", e => e.preventDefault());
     document.addEventListener("dragstart",   e => e.preventDefault());
