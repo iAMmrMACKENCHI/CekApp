@@ -5,11 +5,11 @@
 
 // ─── CONFIG ────────────────────────────────────────────────
 const CONFIG = {
-  APPS_SCRIPT_URL: "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE",
-  DRIVE_FOLDER:    "YOUR_GOOGLE_DRIVE_FOLDER_LINK_HERE",
-  UPI_ID:          "physicswithvikas@upi",
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvsSYomfz25kcNJKTTZxtSstqa71Aqj5NCGGlrjVYf08V4Ifyu3PYlQzSD2C9cFzvQ/exec",
+  DRIVE_FOLDER:    "https://drive.google.com/drive/u/0/folders/1Z_jJbShQ0povcJNdSyAm05UocDx6sg_7",
+  UPI_ID:          "jhakaas1112vikash@upi",
   COURSE_PRICE:    2499,
-  APP_NAME:        "Physics with Vikas",
+  APP_NAME:        "CEK : Sabka Vikas",
 };
 
 // ─── MOCK REELS DATA (replace with live Sheets fetch) ───────
