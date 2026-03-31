@@ -7,9 +7,9 @@
 const CONFIG = {
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvsSYomfz25kcNJKTTZxtSstqa71Aqj5NCGGlrjVYf08V4Ifyu3PYlQzSD2C9cFzvQ/exec",
   DRIVE_FOLDER:    "https://drive.google.com/drive/u/0/folders/1Z_jJbShQ0povcJNdSyAm05UocDx6sg_7",
-  UPI_ID:          "jhakaas1112vikash@upi",
+  UPI_ID:          "physicswithvikas@upi",
   COURSE_PRICE:    2499,
-  APP_NAME:        "CEK : Sabka Vikas",
+  APP_NAME:        "Physics with Vikas",
 };
 
 // ─── MOCK REELS DATA (replace with live Sheets fetch) ───────
@@ -241,9 +241,51 @@ function populateUserUI() {
   document.querySelectorAll("[data-user-initial]").forEach(el => el.textContent = (user.name || "S")[0].toUpperCase());
 }
 
+// ─── DEMO DATA SEEDER ────────────────────────────────────────
+// Seeds mock payment/student data so admin & dashboard aren't blank
+const DemoSeeder = {
+  DEMO_PAYMENTS: [
+    { courseId:"c1", name:"Rahul Sharma",   email:"rahul.sharma@gmail.com",  phone:"9876543210", remark:"PhysicsCourse_RahulSharma",   ts: Date.now() - 3600000 * 5  },
+    { courseId:"c2", name:"Priya Verma",    email:"priya.v2025@gmail.com",   phone:"9123456789", remark:"PhysicsCourse_PriyaVerma",    ts: Date.now() - 3600000 * 3  },
+    { courseId:"c1", name:"Arjun Mehta",    email:"arjunm.jee@gmail.com",    phone:"8765432109", remark:"PhysicsCourse_ArjunMehta",    ts: Date.now() - 3600000 * 1  },
+    { courseId:"c1", name:"Sneha Patel",    email:"sneha.patel11@gmail.com", phone:"7654321098", remark:"PhysicsCourse_SnehaPatel",    ts: Date.now() - 3600000 * 0.5},
+    { courseId:"c2", name:"Dev Agarwal",    email:"dev.agarwal@gmail.com",   phone:"9988776655", remark:"PhysicsCourse_DevAgarwal",    ts: Date.now() - 3600000 * 2  },
+  ],
+  DEMO_USERS: [
+    { name:"Rahul Sharma",  phone:"9876543210", email:"rahul.sharma@gmail.com",  class:"11", loggedIn:false },
+    { name:"Priya Verma",   phone:"9123456789", email:"priya.v2025@gmail.com",   class:"12", loggedIn:false },
+    { name:"Arjun Mehta",   phone:"8765432109", email:"arjunm.jee@gmail.com",    class:"11", loggedIn:false },
+    { name:"Sneha Patel",   phone:"7654321098", email:"sneha.patel11@gmail.com", class:"12", loggedIn:false },
+    { name:"Dev Agarwal",   phone:"9988776655", email:"dev.agarwal@gmail.com",   class:"dropper", loggedIn:false },
+  ],
+  seed() {
+    // Only seed if not already seeded AND no real data present
+    if (localStorage.getItem("pwv_demo_seeded")) return;
+    // Seed pending payments
+    const existingPending = JSON.parse(localStorage.getItem("pwv_pending") || "[]");
+    if (existingPending.length === 0) {
+      localStorage.setItem("pwv_pending", JSON.stringify(this.DEMO_PAYMENTS));
+    }
+    // Seed demo users list for admin
+    const existingUsers = JSON.parse(localStorage.getItem("pwv_all_users") || "[]");
+    if (existingUsers.length === 0) {
+      localStorage.setItem("pwv_all_users", JSON.stringify(this.DEMO_USERS));
+    }
+    localStorage.setItem("pwv_demo_seeded", "true");
+  },
+  clear() {
+    localStorage.removeItem("pwv_pending");
+    localStorage.removeItem("pwv_all_users");
+    localStorage.removeItem("pwv_demo_seeded");
+    showToast("Demo data cleared!", "info");
+    setTimeout(() => window.location.reload(), 800);
+  },
+};
+
 // ─── INIT ON PAGE LOAD ────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
   UXControls.init();
   setActiveNav();
   populateUserUI();
+  DemoSeeder.seed(); // Auto-seed demo data on first load
 });
