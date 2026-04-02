@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0284C7"/>
+  <title>Register — Physics with Vikas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { sora:["Sora","sans-serif"], dm:["DM Sans","sans-serif"] },
+        colors: { primary:"#0284C7", dark:"#0F172A", card:"#1E293B" }
+      }}
+    }
+  </script>
+  <style>
+    body { font-family:"DM Sans",sans-serif; background:#0F172A; color:#fff; }
+    .input-field { background:#1E293B; border:1px solid #334155; color:#fff; transition:border-color .2s; }
+    .input-field:focus { outline:none; border-color:#0284C7; box-shadow:0 0 0 3px rgba(2,132,199,.15); }
+    .input-field::placeholder { color:#64748B; }
+    .input-field.error { border-color:#EF4444; }
+    .hero-glow { background:radial-gradient(ellipse 60% 40% at 50% 0%, rgba(2,132,199,.3) 0%, transparent 60%); }
+
+    /* Success screen */
+    #successScreen { display:none; }
+    #successScreen.show { display:flex; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<div class="hero-glow absolute inset-0 h-64 pointer-events-none"></div>
+
+<div class="relative z-10 flex flex-col min-h-screen px-5 max-w-md mx-auto w-full">
+
+  <!-- ── Registration Form ─────────────────────────────────── -->
+  <div id="formScreen" class="flex flex-col flex-1">
+
+    <!-- Header -->
+    <div class="pt-10 pb-8 text-center">
+      <div class="w-16 h-16 rounded-2xl bg-sky-500 mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg shadow-sky-500/30">⚛️</div>
+      <h1 class="font-sora font-bold text-2xl">Register</h1>
+      <p class="text-slate-400 text-sm mt-1">Join 500+ students learning Physics</p>
+    </div>
+
+    <!-- Email notice -->
+    <div class="bg-sky-500/10 border border-sky-500/30 rounded-2xl px-4 py-3 mb-5 flex items-start gap-3">
+      <span class="text-sky-400 text-lg mt-0.5">📧</span>
+      <p class="text-sky-300 text-xs leading-relaxed">
+        After registration, your <strong>login password</strong> will be sent to your email automatically.
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form id="registerForm" class="space-y-4 flex-1" novalidate>
+
+      <!-- Full Name -->
+      <div>
+        <label class="text-slate-300 text-sm font-medium block mb-2">Full Name</label>
+        <input id="regName" type="text" placeholder="e.g. Rahul Sharma" required autocomplete="name"
+          class="input-field w-full px-4 py-3.5 rounded-xl text-base"/>
+        <p id="nameErr" class="text-red-400 text-xs mt-1 hidden">Please enter your full name (at least 2 characters).</p>
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label class="text-slate-300 text-sm font-medium block mb-2">Phone Number</label>
+        <input id="regPhone" type="tel" placeholder="10-digit mobile number" maxlength="10" required autocomplete="tel"
+          class="input-field w-full px-4 py-3.5 rounded-xl text-base"/>
+        <p id="phoneErr" class="text-red-400 text-xs mt-1 hidden">Enter a valid 10-digit number.</p>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="text-slate-300 text-sm font-medium block mb-2">Email Address</label>
+        <input id="regEmail" type="email" placeholder="your@email.com" required autocomplete="email"
+          class="input-field w-full px-4 py-3.5 rounded-xl text-base"/>
+        <p id="emailErr" class="text-red-400 text-xs mt-1 hidden">Enter a valid email address.</p>
+      </div>
+
+      <!-- Class -->
+      <div>
+        <label class="text-slate-300 text-sm font-medium block mb-2">You are in</label>
+        <select id="regClass" class="input-field w-full px-4 py-3.5 rounded-xl text-base">
+          <option value="">Select your class</option>
+          <option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+          <option value="dropper">Dropper (Repeating)</option>
+        </select>
+      </div>
+
+      <!-- API Error -->
+      <p id="apiErr" class="text-red-400 text-sm hidden text-center bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3"></p>
+
+      <!-- Submit Button -->
+      <div class="pt-2">
+        <button type="submit" id="regBtn"
+          class="w-full bg-sky-500 hover:bg-sky-400 active:bg-sky-600 text-white font-sora font-semibold py-4 rounded-2xl text-base transition shadow-lg shadow-sky-500/30 relative overflow-hidden">
+          <span id="btnText">Register →</span>
+          <span id="btnLoader" class="hidden absolute inset-0 flex items-center justify-center">
+            <svg class="animate-spin w-5 h-5 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-500 text-center">
+        By registering, you agree to receive course updates via WhatsApp / Email.
+      </p>
+    </form>
+
+    <!-- Login Link -->
+    <div class="py-8 text-center">
+      <p class="text-slate-400 text-sm">Already have an account?
+        <a href="login.html" class="text-sky-400 font-semibold ml-1">Login →</a>
+      </p>
+    </div>
+
+  </div><!-- /formScreen -->
+
+
+  <!-- ── Success Screen ────────────────────────────────────── -->
+  <div id="successScreen" class="flex-col items-center justify-center flex-1 text-center py-16">
+    <div class="w-20 h-20 rounded-2xl bg-emerald-500 mx-auto flex items-center justify-center text-4xl mb-6 shadow-lg shadow-emerald-500/30">✓</div>
+    <h2 class="font-sora font-bold text-2xl mb-3">You're Registered!</h2>
+    <p class="text-slate-400 text-sm leading-relaxed mb-2 max-w-xs mx-auto">
+      Your password has been sent to:
+    </p>
+    <p id="confirmedEmail" class="text-sky-400 font-semibold text-base mb-6"></p>
+    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl px-5 py-4 mb-8 max-w-xs mx-auto text-left">
+      <p class="text-xs text-slate-500 mb-1">What to do next:</p>
+      <ol class="text-slate-300 text-sm space-y-1.5">
+        <li>1. Open your email inbox</li>
+        <li>2. Find the email from Physics with Vikas</li>
+        <li>3. Copy your password</li>
+        <li>4. Login below</li>
+      </ol>
+    </div>
+    <a href="login.html"
+      class="inline-block w-full max-w-xs bg-sky-500 hover:bg-sky-400 text-white font-sora font-semibold py-4 rounded-2xl text-base transition shadow-lg shadow-sky-500/30 text-center">
+      Go to Login →
+    </a>
+    <p class="text-xs text-slate-600 mt-4">Didn't receive the email? Check spam or
+      <button onclick="resendEmail()" class="text-sky-500 underline">resend it</button>.
+    </p>
+  </div><!-- /successScreen -->
+
+</div>
+
+<script src="script.js"></script>
+<script>
+  Auth.requireGuest();
+
+  var registeredEmail = '';
+  var registeredData  = null;
+
+  // ── Helpers ────────────────────────────────────────────────
+  function setLoading(on) {
+    document.getElementById('btnText').classList.toggle('hidden', on);
+    document.getElementById('btnLoader').classList.toggle('hidden', !on);
+    document.getElementById('regBtn').disabled = on;
+  }
+
+  function showErr(id, show) {
+    var el = document.getElementById(id);
+    el.classList.toggle('hidden', !show);
+    var inputMap = { nameErr:'regName', phoneErr:'regPhone', emailErr:'regEmail' };
+    if (inputMap[id]) document.getElementById(inputMap[id]).classList.toggle('error', show);
+  }
+
+  function showApiErr(msg) {
+    var el = document.getElementById('apiErr');
+    el.textContent = msg;
+    el.classList.remove('hidden');
+  }
+
+  function hideApiErr() { document.getElementById('apiErr').classList.add('hidden'); }
+
+  // ── Form Submit ────────────────────────────────────────────
+  document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideApiErr();
+
+    var name  = document.getElementById('regName').value.trim();
+    var phone = document.getElementById('regPhone').value.trim();
+    var email = document.getElementById('regEmail').value.trim();
+    var cls   = document.getElementById('regClass').value;
+
+    // Client-side validation
+    var hasError = false;
+    showErr('nameErr',  name.length  < 2);  if (name.length  < 2)                          hasError = true;
+    showErr('phoneErr', !/^\d{10}$/.test(phone));                                           if (!/^\d{10}$/.test(phone)) hasError = true;
+    showErr('emailErr', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));                        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) hasError = true;
+    if (hasError) return;
+
+    setLoading(true);
+
+    try {
+      var result = await API.registerStudent(name, phone, email, cls);
+
+      if (result.success) {
+        // API call succeeded — save user and show success screen
+        registeredEmail = email;
+        registeredData  = result.student || { name, phone, email, class: cls };
+        Auth.setUser(Object.assign({ loggedIn: false }, registeredData));
+        if (cls) Prefs.set({ class: cls });
+
+        document.getElementById('confirmedEmail').textContent = email;
+        document.getElementById('formScreen').style.display    = 'none';
+        document.getElementById('successScreen').classList.add('show');
+
+      } else {
+        // Server returned a specific error (e.g. duplicate email)
+        showApiErr(result.error || 'Registration failed. Please try again.');
+        setLoading(false);
+      }
+
+    } catch (err) {
+      if (err.message === 'APPS_SCRIPT_NOT_CONFIGURED') {
+        // ── Offline / demo mode ────────────────────────────
+        // Script URL not set — save locally and proceed
+        Auth.setUser({ name: name, phone: phone, email: email, class: cls, loggedIn: false });
+        if (cls) Prefs.set({ class: cls });
+        registeredEmail = email;
+
+        document.getElementById('confirmedEmail').textContent = email;
+        document.getElementById('formScreen').style.display   = 'none';
+        document.getElementById('successScreen').classList.add('show');
+
+        // Show a soft warning about offline mode
+        setTimeout(function(){
+          showToast('⚠️ Offline mode — email not sent (set Apps Script URL in Admin)', 'warning');
+        }, 500);
+
+      } else {
+        // Network or unexpected error — still allow proceeding locally
+        Auth.setUser({ name: name, phone: phone, email: email, class: cls, loggedIn: false });
+        if (cls) Prefs.set({ class: cls });
+        registeredEmail = email;
+
+        document.getElementById('confirmedEmail').textContent = email;
+        document.getElementById('formScreen').style.display   = 'none';
+        document.getElementById('successScreen').classList.add('show');
+
+        setTimeout(function(){
+          showToast('Registration saved locally. Check email once API is configured.', 'warning');
+        }, 500);
+      }
+    }
+  });
+
+  // ── Resend email placeholder ───────────────────────────────
+  async function resendEmail() {
+    if (!registeredEmail) return;
+    showToast('Contact Vikas Sir on WhatsApp to resend credentials.', 'info');
+  }
+  window.resendEmail = resendEmail;
+</script>
+</body>
+</html>
