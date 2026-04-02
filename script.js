@@ -8,10 +8,10 @@
 
 // ── Configuration ─────────────────────────────────────────────
 var CONFIG = {
-  APPS_SCRIPT_URL : localStorage.getItem('pwv_override_script_url') || 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec',
-  UPI_ID          : localStorage.getItem('pwv_override_upi')        || 'physicswithvikas@upi',
-  DRIVE_FOLDER    : localStorage.getItem('pwv_override_drive')      || '#',
-  ADMIN_SECRET    : localStorage.getItem('pwv_override_secret')     || 'vikas2024secret',
+  APPS_SCRIPT_URL : 'https://script.google.com/macros/s/AKfycbzxOEeNH_Q0ix-zTxh9AGmOLvfVdZ0WI-wh82PP-Sfs4D49axytA6Hw9iqWRgcjTtT1/exec',
+  UPI_ID          : 'jhakassvikash1112@upi',
+  DRIVE_FOLDER  = : 'httphttps://drive.google.com/drive/u/0/folders/1Z_jJbShQ0povcJNdSyAm05UocDx6sg_7',
+  ADMIN_SECRET    : 'mnbvcxz',
 };
 
 // ── Course Data ───────────────────────────────────────────────
