@@ -11,7 +11,7 @@ var CONFIG = {
   APPS_SCRIPT_URL : 'https://script.google.com/macros/s/AKfycbzxOEeNH_Q0ix-zTxh9AGmOLvfVdZ0WI-wh82PP-Sfs4D49axytA6Hw9iqWRgcjTtT1/exec',
   UPI_ID          : 'jhakassvikash1112@upi',
   DRIVE_FOLDER  = : 'httphttps://drive.google.com/drive/u/0/folders/1Z_jJbShQ0povcJNdSyAm05UocDx6sg_7',
-  ADMIN_SECRET    : 'mnbvcxz',
+  ADMIN_SECRET    : 'vikas2024admin', 
 };
 
 // ── Course Data ───────────────────────────────────────────────
